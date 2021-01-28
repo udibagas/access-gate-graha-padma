@@ -16,10 +16,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $resource = User::when($request->keyword, function ($q) use ($request) {
-            $q->where('field', 'LIKE', "%{$request->keyword}%");
+            $q->where('name', 'LIKE', "%{$request->keyword}%");
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
-        return $request->pagination ? $resource->paginate($request->pageSize) : $resource->get();
+        return $request->paginated ? $resource->paginate($request->per_page) : $resource->get();
     }
 
     /**

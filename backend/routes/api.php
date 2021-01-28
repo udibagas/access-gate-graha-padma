@@ -21,14 +21,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('me', [AuthController::class, 'me']);
-    Route::post('logout', [AuthController::class, 'logout']);
+// Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::get('me', [AuthController::class, 'me']);
+Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::resource('user', UserController::class)->except(['create', 'edit']);
-    Route::resource('accessGate', AccessGateController::class)->except(['create', 'edit']);
-    Route::resource('camera', CameraController::class)->except(['create', 'edit']);
-    Route::resource('member', MemberController::class)->except(['create', 'edit']);
-});
+Route::resource('user', UserController::class)->except(['create', 'edit']);
+Route::resource('accessGate', AccessGateController::class)->except(['create', 'edit']);
+Route::resource('camera', CameraController::class)->except(['create', 'edit']);
+Route::resource('member', MemberController::class)->except(['create', 'edit']);
+// });
 
 Route::post('accessLog', [AccessLogController::class, 'store']);

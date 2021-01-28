@@ -20,6 +20,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    'bootstrap/dist/css/bootstrap.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
 

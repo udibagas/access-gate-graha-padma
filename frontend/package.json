@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxtjs/auth-next": "5.0.0-1611574754.9020f2a",
     "@nuxtjs/axios": "^5.12.5",
+    "bootstrap": "^5.0.0-beta1",
     "core-js": "^3.8.2",
     "element-ui": "^2.15.0",
     "nuxt": "^2.14.12"

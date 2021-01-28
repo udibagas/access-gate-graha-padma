@@ -15,11 +15,11 @@ class CameraController extends Controller
      */
     public function index(Request $request)
     {
-        $resource = Camera::when($request->keyword, function($q) use ($request) {
+        $resource = Camera::when($request->keyword, function ($q) use ($request) {
             $q->where('field', 'LIKE', "%{$request->keyword}%");
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
-        return $request->pagination ? $resource->paginate($request->pageSize) : $resource->get();
+        return $request->paginated ? $resource->paginate($request->pageSize) : $resource->get();
     }
 
     /**
