@@ -11,8 +11,10 @@
 					active-text-color="red"
 				>
 					<el-menu-item index="/">Home</el-menu-item>
-					<el-menu-item index="/setting">Setting</el-menu-item>
 					<el-menu-item index="/member">Member</el-menu-item>
+					<el-menu-item index="/access-gate">Access Gate</el-menu-item>
+					<el-menu-item index="/camera">Camera</el-menu-item>
+					<el-menu-item index="/snapshot">Snapshot</el-menu-item>
 					<el-menu-item index="/user">User</el-menu-item>
 				</el-menu>
 				<el-dropdown>
@@ -24,8 +26,16 @@
 						></el-avatar>
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item icon="el-icon-edit">Profile</el-dropdown-item>
-						<el-dropdown-item icon="el-icon-delete">Logout</el-dropdown-item>
+						<el-dropdown-item
+							icon="el-icon-user"
+							@click.native.prevent="profile"
+							>Profile</el-dropdown-item
+						>
+						<el-dropdown-item
+							icon="el-icon-arrow-right"
+							@click.native.prevent="logout"
+							>Logout</el-dropdown-item
+						>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -36,11 +46,24 @@
 	</el-container>
 </template>
 
-<style lang="css">
-* {
-	font-family: Arial, Helvetica, sans-serif;
-}
+<script>
+export default {
+  middleware: ['auth'],
 
+  methods: {
+    logout() {
+			this.$auth.logout()
+			this.$router.push('/login')
+    },
+
+    profile() {
+      // TODO
+    }
+  }
+}
+</script>
+
+<style lang="css" scoped>
 body {
 	margin: 0;
 	padding: 0;
@@ -56,7 +79,6 @@ body {
 
 .el-main {
 	height: calc(100vh - 60px);
-	background: #f1f5f8;
 	padding: 0px;
 }
 
@@ -68,18 +90,5 @@ body {
 
 .el-menu.el-menu--horizontal {
 	border-bottom: none;
-}
-
-.el-table td,
-.el-table th {
-	padding: 8px 0;
-}
-
-.flex {
-	display: flex;
-}
-
-.flex-grow {
-	flex-grow: 1;
 }
 </style>

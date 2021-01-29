@@ -1,0 +1,27 @@
+* {
+  font-family: monospace;
+}
+
+.el-table td,
+.el-table th {
+	padding: 8px 0;
+}
+
+.el-button--primary {
+	background: navy;
+}
+
+.el-button--primary.is-plain {
+	color: navy;
+	border-color: navy;
+	background: none;
+}
+
+.el-button--primary.is-plain:hover {
+	background: navy;
+	color: white;
+}
+
+.bg-navy {
+  background: navy;
+}

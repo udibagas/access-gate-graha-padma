@@ -9,11 +9,11 @@ class AccessGate extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 'type', 'cameras', 'host'
-    ];
+    protected $fillable = ['name', 'type', 'cameras', 'host'];
 
     protected $casts = ['cameras' => 'json'];
+
+    protected $appends = ['camera_list'];
 
     public function getCameraListAttribute()
     {

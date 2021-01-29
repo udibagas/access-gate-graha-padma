@@ -17,9 +17,17 @@ class MemberController extends Controller
     {
         $resource = Member::when($request->keyword, function ($q) use ($request) {
             $q->where('name', 'LIKE', "%{$request->keyword}%");
+        })->when($request->expired, function ($q) use ($request) {
+            if ($request->expired[0] == 'yes') {
+                $q->whereRaw('DATE(NOW()) > expired_date');
+            }
+
+            if ($request->expired[0] == 'no') {
+                $q->whereRaw('DATE(NOW()) <= expired_date OR expired_date IS NULL');
+            }
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
-        return $request->paginated ? $resource->paginate($request->per_page) : $resource->get();
+        return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
     }
 
     /**

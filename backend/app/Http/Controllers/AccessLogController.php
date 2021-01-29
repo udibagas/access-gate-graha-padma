@@ -24,7 +24,7 @@ class AccessLogController extends Controller
             $q->whereIn('access_gate_id', $request->access_gate_id);
         })->orderBy($request->sortColumn ?: 'created_at', $request->sortOrder ?: 'desc');
 
-        return $request->paginated ? $resource->paginate($request->pageSize) : $resource->get();
+        return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
     }
 
     /**

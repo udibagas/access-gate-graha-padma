@@ -18,8 +18,7 @@ export default {
       sortColumn: 'id',
       sortDirection: 'asc',
       keyword: '',
-      paginated: false,
-      selectedData: {},
+      // paginated: false,
       showForm: false,
       form: {},
       errors: {},
@@ -42,7 +41,7 @@ export default {
       this.loading = true;
 
       this.$axios.$get(this.url, { params }).then(r => {
-        if (this.pagination) {
+        if (this.paginated) {
           this.tableData = r.data;
           const { from, to, total, current_page, per_page } = r;
           this.pagination = { from, to, total, current_page, per_page };
@@ -57,7 +56,7 @@ export default {
     deleteData(id) {
       this.$confirm('Konfirmasi', 'Anda yakin?', { type: 'warning' }).then(() => {
         this.$axios.$delete(`${this.url}/${id}`).then(r => {
-          this.$message({ message: r.message, type: 'info' });
+          this.$message({ message: r.message, type: 'success' });
           this.fetchData();
         }).catch(e => {
           this.$message({ message: e.response.data.message, type: 'error' });
@@ -66,7 +65,7 @@ export default {
     },
 
     openForm(data) {
-      this.selectedData = JSON.parse(JSON.stringify(data));
+      this.form = JSON.parse(JSON.stringify(data));
       this.showForm = true;
     },
 
@@ -78,7 +77,8 @@ export default {
         url: this.form.id ? `${this.url}/${this.form.id}` : this.url,
         data: this.form
       }).then(r => {
-        this.$message({ message: r.message, type: 'info' });
+        this.$message({ message: r.data.message, type: 'success' });
+        this.closeForm();
         this.fetchData();
       }).catch(e => {
         this.$message({ message: e.response.data.message, type: 'error' });

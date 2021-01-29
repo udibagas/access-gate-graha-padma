@@ -21,7 +21,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'bootstrap/dist/css/bootstrap.css',
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+    '@/assets/css/app.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -50,6 +51,12 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: '/login',
+      logout: '/',
+      calback: '/login',
+      home: '/'
+    },
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',

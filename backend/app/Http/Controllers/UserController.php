@@ -19,7 +19,7 @@ class UserController extends Controller
             $q->where('name', 'LIKE', "%{$request->keyword}%");
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
-        return $request->paginated ? $resource->paginate($request->per_page) : $resource->get();
+        return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
     }
 
     /**

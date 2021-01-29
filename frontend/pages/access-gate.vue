@@ -1,23 +1,24 @@
 <template>
 	<el-card :body-style="{ padding: '0px' }">
 		<div slot="header" class="d-flex justify-content-between">
-			<h3 class="text-muted mt-2">KELOLA USER</h3>
+			<h3 class="text-muted mt-2">ACCESS GATE</h3>
 			<el-form inline @submit.native.prevent>
 				<el-form-item class="mb-0">
 					<el-button
-						size="small"
 						@click="openForm({})"
 						type="primary"
 						icon="el-icon-plus"
+						size="small"
+						title="Tambah Gate"
 					></el-button>
 				</el-form-item>
 				<el-form-item class="mb-0">
 					<el-input
-						size="small"
 						v-model="keyword"
 						placeholder="Cari"
 						prefix-icon="el-icon-search"
 						clearable
+						size="small"
 						@change="
 							() => {
 								this.pagination.current_page = 1
@@ -43,8 +44,18 @@
 				label="#"
 				:index="paginated ? pagination.from : 1"
 			></el-table-column>
-			<el-table-column prop="name" label="Name"></el-table-column>
-			<el-table-column prop="email" label="Email"></el-table-column>
+			<el-table-column prop="name" label="Nama"></el-table-column>
+			<el-table-column prop="type" label="Jenis"></el-table-column>
+			<el-table-column prop="host" label="IP"></el-table-column>
+			<el-table-column label="Kamera">
+				<template slot-scope="scope">
+					{{
+						scope.row.camera_list
+							? scope.row.camera_list.map((c) => c.name).join(',')
+							: ''
+					}}
+				</template>
+			</el-table-column>
 
 			<ActionColumn
 				@refreshData="refreshData"
@@ -62,10 +73,8 @@
 			:total="tableData.length"
 		/>
 
-		<!-- FORM -->
-
 		<el-dialog
-			title="USER"
+			title="MEMBER"
 			:visible.sync="showForm"
 			:before-close="closeForm"
 			:close-on-click-modal="false"
@@ -78,37 +87,49 @@
 					</div>
 				</el-form-item>
 
-				<el-form-item label="Email" :class="{ 'is-error': errors.email }">
-					<el-input v-model="form.email" placeholder="Email"></el-input>
-					<div class="el-form-item__error" v-if="errors.email">
-						{{ errors.email.join(', ') }}
+				<el-form-item label="IP" :class="{ 'is-error': errors.host }">
+					<el-input v-model="form.host" placeholder="IP"></el-input>
+					<div class="el-form-item__error" v-if="errors.host">
+						{{ errors.host.join(', ') }}
 					</div>
 				</el-form-item>
 
-				<el-form-item label="Password" :class="{ 'is-error': errors.password }">
-					<el-input
-						type="password"
-						v-model="form.password"
-						placeholder="Password"
-					></el-input>
-
-					<div class="el-form-item__error" v-if="errors.password">
-						{{ errors.password.join(', ') }}
+				<el-form-item label="Jenis" :class="{ 'is-error': errors.phone }">
+					<el-select
+						v-model="form.type"
+						placeholder="Jenis"
+						style="width: 100%"
+					>
+						<el-option label="IN" value="IN"></el-option>
+						<el-option label="OUT" value="OUT"></el-option>
+					</el-select>
+					<div class="el-form-item__error" v-if="errors.type">
+						{{ errors.type.join(', ') }}
 					</div>
 				</el-form-item>
 
-				<el-form-item
-					label="Konfirmasi Password"
-					:class="{ 'is-error': errors.password_confirmation }"
-				>
-					<el-input
-						type="password"
-						v-model="form.password_confirmation"
-						placeholder="Konfirmasi Password"
-					></el-input>
+				<el-form-item label="Kamera" :class="{ 'is-error': errors.cameras }">
+					<el-select
+						style="width: 100%"
+						v-model="form.cameras"
+						placeholder="Kamera"
+						filterable
+						default-first-option
+						remote
+						clearable
+						multiple
+						:remote-method="(q) => getList('/api/camera', 'camera', q)"
+					>
+						<el-option
+							v-for="camera in cameraList"
+							:key="camera.id"
+							:value="camera.id"
+							:label="camera.name"
+						></el-option>
+					</el-select>
 
-					<div class="el-form-item__error" v-if="errors.password_confirmation">
-						{{ errors.password_confirmation.join(', ') }}
+					<div class="el-form-item__error" v-if="errors.cameras">
+						{{ errors.cameras.join(', ') }}
 					</div>
 				</el-form-item>
 			</el-form>
@@ -133,13 +154,18 @@
 
 <script>
 import crud from '../mixins/crud';
+import dropdown from '../mixins/dropdown';
 
 export default {
-  mixins: [crud],
+  mixins: [crud, dropdown],
+
+  created() {
+    this.getList('/api/camera', 'cameraList')
+  },
+
   data() {
     return {
-      url: '/api/user',
-      paginated: false
+      url: '/api/accessGate'
     }
   }
 }

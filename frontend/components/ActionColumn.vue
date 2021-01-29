@@ -34,3 +34,9 @@
 		</template>
 	</el-table-column>
 </template>
+
+<script>
+export default {
+  props: ['row']
+}
+</script>
