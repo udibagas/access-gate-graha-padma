@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,8 @@ class AccessLog extends Model
     protected $fillable = ['member_id', 'access_gate_id'];
 
     protected $with = ['member', 'accessGate'];
+
+    protected $appends = ['time'];
 
     public function member()
     {
@@ -26,5 +29,10 @@ class AccessLog extends Model
     public function snapshots()
     {
         return $this->hasMany(Snapshot::class);
+    }
+
+    public function getTimeAttribute()
+    {
+        return $this->created_at->format('d-M-Y H:i:s');
     }
 }

@@ -10,7 +10,7 @@ class Member extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'phone', 'card_number', 'expired_date'];
+    protected $fillable = ['name', 'phone', 'card_number', 'expired_date', 'plate_number'];
 
     protected $appends = ['is_expired', 'readable_expired_date'];
 

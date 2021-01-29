@@ -26,6 +26,7 @@ class MemberRequest extends FormRequest
         return [
             'name' => 'required',
             'card_number' => 'required',
+            'plate_number' => 'required'
         ];
     }
 }

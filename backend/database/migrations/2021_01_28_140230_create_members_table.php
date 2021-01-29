@@ -18,6 +18,7 @@ class CreateMembersTable extends Migration
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('card_number');
+            $table->string('plate_number');
             $table->date('expired_date')->nullable();
             $table->timestamps();
         });

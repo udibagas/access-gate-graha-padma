@@ -12,6 +12,7 @@
 						title="Tambah Member"
 					></el-button>
 				</el-form-item>
+
 				<el-form-item class="mb-0">
 					<el-button
 						@click="openForm({})"
@@ -22,6 +23,7 @@
 						plain
 					></el-button>
 				</el-form-item>
+
 				<el-form-item class="mb-0">
 					<el-button
 						@click="openForm({})"
@@ -32,6 +34,7 @@
 						plain
 					></el-button>
 				</el-form-item>
+
 				<el-form-item class="mb-0">
 					<el-input
 						v-model="keyword"
@@ -65,15 +68,28 @@
 				:index="paginated ? pagination.from : 1"
 			></el-table-column>
 
-			<el-table-column prop="name" label="Name"></el-table-column>
+			<el-table-column prop="name" label="Nama"></el-table-column>
 
-			<el-table-column prop="phone" label="Phone"></el-table-column>
+			<el-table-column
+				prop="phone"
+				label="Nomor HP"
+				width="200"
+			></el-table-column>
 
 			<el-table-column
 				prop="card_number"
-				label="Card Number"
+				label="Nomor Kartu"
 				align="center"
 				header-align="center"
+				width="200"
+			></el-table-column>
+
+			<el-table-column
+				prop="plate_number"
+				label="Plat Nomor"
+				align="center"
+				header-align="center"
+				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -81,6 +97,7 @@
 				label="Expired Date"
 				align="center"
 				header-align="center"
+				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -154,6 +171,19 @@
 					></el-input>
 					<div class="el-form-item__error" v-if="errors.card_number">
 						{{ errors.card_number.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item
+					label="Plat Nomor"
+					:class="{ 'is-error': errors.plate_number }"
+				>
+					<el-input
+						v-model="form.plate_number"
+						placeholder="Plat Nomor"
+					></el-input>
+					<div class="el-form-item__error" v-if="errors.plate_number">
+						{{ errors.plate_number.join(', ') }}
 					</div>
 				</el-form-item>
 

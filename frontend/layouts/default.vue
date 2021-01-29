@@ -9,6 +9,7 @@
 					background-color="transparent"
 					text-color="white"
 					active-text-color="red"
+					:default-active="$route.path"
 				>
 					<el-menu-item index="/">Home</el-menu-item>
 					<el-menu-item index="/member">Member</el-menu-item>

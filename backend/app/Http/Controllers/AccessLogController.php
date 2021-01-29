@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class AccessLogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('registeredDevice')->only('store');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,10 +22,19 @@ class AccessLogController extends Controller
     {
         $resource = AccessLog::when($request->keyword, function ($q) use ($request) {
             $q->whereHas('member', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%{$request->keyword}%");
+                $q->where(function ($q) use ($request) {
+                    $q->where('name', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%");
+                });
             });
         })->when($request->access_gate_id, function ($q) use ($request) {
             $q->whereIn('access_gate_id', $request->access_gate_id);
+        })->when($request->type, function ($q) use ($request) {
+            $q->whereHas('accessGate', function ($q) use ($request) {
+                $q->whereIn('type', $request->type);
+            });
+        })->when($request->dateRange, function ($q) use ($request) {
+            $q->whereRaw('DATE(created_at) BETWEEN ? AND ? ', $request->dateRange);
         })->orderBy($request->sortColumn ?: 'created_at', $request->sortOrder ?: 'desc');
 
         return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
@@ -36,7 +49,7 @@ class AccessLogController extends Controller
     public function store(AccessLogRequest $request)
     {
         $accessLog = AccessLog::create($request->all());
-        TakeSnapshot::dispatch($accessLog);
+        // TakeSnapshot::dispatch($accessLog);
         return ['message' => 'Data telah disimpan'];
     }
 
@@ -61,5 +74,39 @@ class AccessLogController extends Controller
     {
         $accessLog->delete();
         return ['message' => 'Data telah dihapus'];
+    }
+
+    public function export(Request $request)
+    {
+        $data = AccessLog::when($request->keyword, function ($q) use ($request) {
+            $q->whereHas('member', function ($q) use ($request) {
+                $q->where(function ($q) use ($request) {
+                    $q->where('name', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%");
+                });
+            });
+        })->when($request->access_gate_id, function ($q) use ($request) {
+            $q->whereIn('access_gate_id', $request->access_gate_id);
+        })->when($request->type, function ($q) use ($request) {
+            $q->whereHas('accessGate', function ($q) use ($request) {
+                $q->whereIn('type', $request->type);
+            });
+        })->when($request->dateRange, function ($q) use ($request) {
+            $q->whereRaw('DATE(created_at) BETWEEN ? AND ? ', $request->dateRange);
+        })->orderBy($request->sortColumn ?: 'created_at', $request->sortOrder ?: 'desc')
+            ->get()->map(function ($item) {
+                return [
+                    'Waktu' => $item->created_at->format('Y-m-d H:i:s'),
+                    'Gate' => $item->accessGate->name,
+                    'Jenis' => $item->accessGate->type,
+                    'Nama' => $item->member->name,
+                    'Nomor Kartu' => $item->member->card_number,
+                ];
+            });
+
+        return [
+            'filename' => 'AccessLog_' . date('Y_m_d_H_i_s') . 'xls',
+            'data' => $data
+        ];
     }
 }

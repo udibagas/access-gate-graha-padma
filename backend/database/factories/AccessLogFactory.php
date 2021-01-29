@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Member;
+use App\Models\AccessLog;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MemberFactory extends Factory
+class AccessLogFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Member::class;
+    protected $model = AccessLog::class;
 
     /**
      * Define the model's default state.
@@ -22,11 +22,8 @@ class MemberFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
-            'phone' => $this->faker->phoneNumber,
-            'card_number' => $this->faker->creditCardNumber,
-            'plate_number' => 'H 3329 CQ',
-            'expired_date' => $this->faker->date()
+            'access_gate_id' => rand(1, 2),
+            'member_id' => rand(1, 100)
         ];
     }
 }

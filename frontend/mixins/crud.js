@@ -1,3 +1,5 @@
+import exportFromJson from 'export-from-json';
+
 export default {
   created() {
     this.fetchData();
@@ -18,7 +20,7 @@ export default {
       sortColumn: 'id',
       sortDirection: 'asc',
       keyword: '',
-      // paginated: false,
+      paginated: false,
       showForm: false,
       form: {},
       errors: {},
@@ -49,17 +51,39 @@ export default {
           this.tableData = r;
         }
       }).catch(e => {
-        this.$message({ message: e.response.data.message, type: 'error' });
+        this.$message({ message: e.response.data.message, type: 'error', showClose: true });
+      }).finally(() => this.loading = false);
+    },
+
+    exportData() {
+      const params = {
+        keyword: this.keyword,
+        sortColumn: this.sortColumn,
+        sortDirection: this.sortDirection,
+        paginated: false,
+        ...this.filters
+      }
+
+      this.loading = true;
+
+      this.$axios.$get(`${this.url}/export`, { params }).then(r => {
+        exportFromJson({
+						data: r.data,
+						fileName: r.filename,
+						exportType: "xls"
+					});
+      }).catch(e => {
+        this.$message({ message: e.response.data.message, type: 'error', showClose: true });
       }).finally(() => this.loading = false);
     },
 
     deleteData(id) {
       this.$confirm('Konfirmasi', 'Anda yakin?', { type: 'warning' }).then(() => {
         this.$axios.$delete(`${this.url}/${id}`).then(r => {
-          this.$message({ message: r.message, type: 'success' });
+          this.$message({ message: r.message, type: 'success', showClose: true });
           this.fetchData();
         }).catch(e => {
-          this.$message({ message: e.response.data.message, type: 'error' });
+          this.$message({ message: e.response.data.message, type: 'error', showClose: true });
         });
       }).catch(e => console.log(e));
     },
@@ -77,11 +101,11 @@ export default {
         url: this.form.id ? `${this.url}/${this.form.id}` : this.url,
         data: this.form
       }).then(r => {
-        this.$message({ message: r.data.message, type: 'success' });
+        this.$message({ message: r.data.message, type: 'success', showClose: true });
         this.closeForm();
         this.fetchData();
       }).catch(e => {
-        this.$message({ message: e.response.data.message, type: 'error' });
+        this.$message({ message: e.response.data.message, type: 'error', showClose: true });
 
         if (e.response.status == 422) {
           this.errors = e.response.data.errors;

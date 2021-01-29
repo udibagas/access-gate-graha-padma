@@ -15,8 +15,8 @@ class AccessGateSeeder extends Seeder
     public function run()
     {
         AccessGate::insert([
-            ['name' => 'GATE IN', 'type' => 'IN', 'host' => '192.168.1.100'],
-            ['name' => 'GATE OUT', 'type' => 'OUT', 'host' => '192.168.1.101'],
+            ['name' => 'GATE IN', 'type' => 'IN', 'host' => '192.168.1.100', 'cameras' => json_encode([1, 2])],
+            ['name' => 'GATE OUT', 'type' => 'OUT', 'host' => '192.168.1.101', 'cameras' => json_encode([1, 2])],
         ]);
     }
 }
