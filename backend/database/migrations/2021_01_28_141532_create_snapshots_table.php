@@ -15,6 +15,10 @@ class CreateSnapshotsTable extends Migration
     {
         Schema::create('snapshots', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('access_log_id');
+            $table->unsignedBigInteger('camera_id');
+            $table->string('path');
+            $table->string('filename');
             $table->timestamps();
         });
     }

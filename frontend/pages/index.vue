@@ -153,7 +153,7 @@
 			width="1200px"
 			title="SNAPSHOT"
 		>
-			<div class="bg-light p-3 mb-3">
+			<div class="bg-secondary p-3 mb-3 text-white">
 				<span class="label">Nama</span> : {{ selectedData.member.name }} <br />
 				<span class="label">Nomor Kartu</span> :
 				{{ selectedData.member.card_number }} <br />
@@ -166,10 +166,11 @@
 				<br />
 				<span class="label">Waktu</span> : {{ selectedData.time }}
 			</div>
+
 			<div class="d-flex justify-content-between">
 				<div v-for="snapshot in selectedData.snapshots" :key="snapshot.id">
 					<img :src="snapshot.url" class="img-fluid" style="height: 320px" />
-					<div class="bg-light px-3 py-2">
+					<div class="bg-secondary text-white px-3 py-2">
 						<span class="label">Kamera</span> : {{ snapshot.camera.name }}
 						<br />
 						<span class="label">Waktu</span> : {{ snapshot.time }}
@@ -191,23 +192,23 @@ export default {
       paginated: true,
       filterGate: [],
       selectedData: {
-        id: 1,
-        time: '12-Jan-2021 19:00:12',
-        member: {
-          name: 'Bagas',
-          card_number: '123',
-          plate_number: 'sss'
-        },
-        access_gate: {
-          name: 'GATE 1',
-          type: 'IN'
-        },
-        snapshots: [
-          {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 1, camera: {name: 'KAMERA A'}, time: '12-Jan-2021 19:00:12'},
-          {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 2, camera: {name: 'KAMERA B'}, time: '12-Jan-2021 19:00:12'},
-        ]
+        // id: 1,
+        // time: '12-Jan-2021 19:00:12',
+        // member: {
+        //   name: 'Bagas',
+        //   card_number: '123',
+        //   plate_number: 'sss'
+        // },
+        // access_gate: {
+        //   name: 'GATE 1',
+        //   type: 'IN'
+        // },
+        // snapshots: [
+        //   {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 1, camera: {name: 'KAMERA A'}, time: '12-Jan-2021 19:00:12'},
+        //   {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 2, camera: {name: 'KAMERA B'}, time: '12-Jan-2021 19:00:12'},
+        // ]
       },
-      snapshotDialog: true
+      snapshotDialog: false
     }
   },
 
@@ -232,7 +233,7 @@ export default {
 <style lang="css" scoped>
 span.label {
 	display: inline-block;
-	width: 120px;
+	width: 100px;
 	font-weight: bold;
 }
 </style>
