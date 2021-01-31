@@ -12,7 +12,7 @@ class AccessLog extends Model
 
     protected $fillable = ['member_id', 'access_gate_id'];
 
-    protected $with = ['member', 'accessGate'];
+    protected $with = ['member', 'accessGate', 'snapshots'];
 
     protected $appends = ['time'];
 
