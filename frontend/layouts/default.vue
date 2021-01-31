@@ -16,7 +16,7 @@
 					<el-menu-item index="/access-gate">Access Gate</el-menu-item>
 					<el-menu-item index="/camera">Camera</el-menu-item>
 					<el-menu-item index="/snapshot">Snapshot</el-menu-item>
-					<el-menu-item index="/user">User</el-menu-item>
+					<!-- <el-menu-item index="/user">User</el-menu-item> -->
 					<el-menu-item index="/setting">Setting</el-menu-item>
 				</el-menu>
 				<el-dropdown>
@@ -45,12 +45,20 @@
 		<el-main>
 			<Nuxt />
 		</el-main>
+
+		<ProfileForm :show="showProfileDialog" @close="showProfileDialog = false" />
 	</el-container>
 </template>
 
 <script>
 export default {
   middleware: ['auth'],
+
+  data() {
+    return {
+      showProfileDialog: false
+    }
+  },
 
   methods: {
     logout() {
@@ -59,7 +67,7 @@ export default {
     },
 
     profile() {
-      // TODO
+      this.showProfileDialog = true;
     }
   }
 }

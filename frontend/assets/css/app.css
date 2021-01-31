@@ -8,6 +8,7 @@
 }
 
 .el-button--primary {
+  border-color: navy;
 	background: navy;
 }
 

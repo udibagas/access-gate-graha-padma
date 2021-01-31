@@ -8,7 +8,7 @@
 				<el-input
 					prefix-icon="el-icon-user"
 					v-model="form.email"
-					placeholder="Email"
+					placeholder="Username/Email"
 				></el-input>
 			</el-form-item>
 
@@ -27,7 +27,9 @@
 			</el-form-item>
 		</el-form>
 
-		<div class="text-center text-muted">&copy; 2021 - MitraTeknik</div>
+		<div class="text-center text-muted">
+			&copy; {{ new Date().getFullYear() }} - MitraTeknik
+		</div>
 	</el-card>
 </template>
 
