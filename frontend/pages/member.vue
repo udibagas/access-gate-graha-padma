@@ -60,7 +60,7 @@
 		</div>
 
 		<el-table
-			height="calc(100vh - 197px)"
+			height="calc(100vh - 171px)"
 			stripe
 			v-loading="loading"
 			:data="tableData"

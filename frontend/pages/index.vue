@@ -63,7 +63,7 @@
 		</div>
 
 		<el-table
-			height="calc(100vh - 197px)"
+			height="calc(100vh - 171px)"
 			stripe
 			v-loading="loading"
 			:data="tableData"
@@ -114,12 +114,24 @@
 				label="Plat Nomor"
 			></el-table-column>
 
-			<el-table-column align="center" header-align="center" width="60">
+			<el-table-column align="center" header-align="center" width="80">
 				<template slot="header">
 					<el-button
-						type="text"
+						type="primary"
 						icon="el-icon-refresh"
 						@click="refreshData"
+						plain
+						size="mini"
+					></el-button>
+				</template>
+
+				<template slot-scope="scope">
+					<el-button
+						icon="el-icon-camera"
+						plain
+						type="primary"
+						size="mini"
+						@click.native.prevent="showSnapshot(scope.row)"
 					></el-button>
 				</template>
 			</el-table-column>
@@ -133,6 +145,38 @@
 			:paginated="paginated"
 			:total="tableData.length"
 		/>
+
+		<el-dialog
+			center
+			v-if="selectedData.id"
+			:visible.sync="snapshotDialog"
+			width="1200px"
+			title="SNAPSHOT"
+		>
+			<div class="bg-light p-3 mb-3">
+				<span class="label">Nama</span> : {{ selectedData.member.name }} <br />
+				<span class="label">Nomor Kartu</span> :
+				{{ selectedData.member.card_number }} <br />
+				<span class="label">Plat Nomor</span> :
+				{{ selectedData.member.plate_number }} <br />
+				<span class="label">Gate</span> :
+				{{ selectedData.access_gate.name }} ({{
+					selectedData.access_gate.type
+				}})
+				<br />
+				<span class="label">Waktu</span> : {{ selectedData.time }}
+			</div>
+			<div class="d-flex justify-content-between">
+				<div v-for="snapshot in selectedData.snapshots" :key="snapshot.id">
+					<img :src="snapshot.url" class="img-fluid" style="height: 320px" />
+					<div class="bg-light px-3 py-2">
+						<span class="label">Kamera</span> : {{ snapshot.camera.name }}
+						<br />
+						<span class="label">Waktu</span> : {{ snapshot.time }}
+					</div>
+				</div>
+			</div>
+		</el-dialog>
 	</el-card>
 </template>
 
@@ -146,6 +190,31 @@ export default {
       url: '/api/accessLogs',
       paginated: true,
       filterGate: [],
+      selectedData: {
+        id: 1,
+        time: '12-Jan-2021 19:00:12',
+        member: {
+          name: 'Bagas',
+          card_number: '123',
+          plate_number: 'sss'
+        },
+        access_gate: {
+          name: 'GATE 1',
+          type: 'IN'
+        },
+        snapshots: [
+          {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 1, camera: {name: 'KAMERA A'}, time: '12-Jan-2021 19:00:12'},
+          {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 2, camera: {name: 'KAMERA B'}, time: '12-Jan-2021 19:00:12'},
+        ]
+      },
+      snapshotDialog: true
+    }
+  },
+
+  methods: {
+    showSnapshot(data) {
+      this.snapshotDialog = true;
+      this.selectedData = data;
     }
   },
 
@@ -159,3 +228,11 @@ export default {
   }
 }
 </script>
+
+<style lang="css" scoped>
+span.label {
+	display: inline-block;
+	width: 120px;
+	font-weight: bold;
+}
+</style>

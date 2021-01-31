@@ -1,13 +1,19 @@
 <template>
 	<el-card>
-		<el-tabs>
-			<el-tab-pane label="Access Gate">
-				<AccessGate />
-			</el-tab-pane>
-			<el-tab-pane label="Camera">
-				<Camera />
-			</el-tab-pane>
-		</el-tabs>
+		<div slot="header" class="d-flex justify-content-between">
+			<h3 class="text-muted mt-2">SETTING</h3>
+			<el-form inline @submit.native.prevent>
+				<el-form-item class="mb-0">
+					<el-button
+						size="small"
+						@click="save"
+						type="primary"
+						icon="el-icon-circle-check"
+						>SIMPAN</el-button
+					>
+				</el-form-item>
+			</el-form>
+		</div>
 	</el-card>
 </template>
 

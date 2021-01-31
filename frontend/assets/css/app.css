@@ -29,3 +29,7 @@
 .el-card__header {
   background-color: #efefef;
 }
+
+.el-card__header {
+  padding: 5px 10px;
+}

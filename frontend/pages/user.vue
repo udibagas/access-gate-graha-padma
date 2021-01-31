@@ -9,7 +9,8 @@
 						@click="openForm({})"
 						type="primary"
 						icon="el-icon-plus"
-					></el-button>
+						>TAMBAH USER</el-button
+					>
 				</el-form-item>
 				<el-form-item class="mb-0">
 					<el-input
@@ -30,7 +31,7 @@
 		</div>
 
 		<el-table
-			height="calc(100vh - 197px)"
+			height="calc(100vh - 171px)"
 			stripe
 			v-loading="loading"
 			:data="tableData"

@@ -1,5 +1,5 @@
 <template>
-	<div class="text-center my-3">
+	<div class="text-center py-3 bg-light">
 		<el-pagination
 			v-if="paginated"
 			background
