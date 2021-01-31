@@ -14,6 +14,22 @@ class Member extends Model
 
     protected $appends = ['is_expired', 'readable_expired_date'];
 
+    public static function parseExcelDate($date)
+    {
+        if ($date === null) {
+            return null;
+        }
+
+        if (!is_numeric($date)) {
+            return date('Y-m-d', strtotime($date));
+        }
+
+        $unix_date = ($date - 25569) * 86400;
+        $date = 25569 + ($unix_date / 86400);
+        $unix_date = ($date - 25569) * 86400;
+        return gmdate("Y-m-d", $unix_date);
+    }
+
     public function getIsExpiredAttribute()
     {
         if ($this->expired_date) {

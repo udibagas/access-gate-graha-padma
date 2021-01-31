@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MemberRequest;
 use App\Models\Member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -80,7 +81,25 @@ class MemberController extends Controller
 
     public function import(Request $request)
     {
-        // TODO
+        $request->validate(['rows' => 'required']);
+
+        $response = DB::transaction(function () use ($request) {
+            foreach ($request->rows as $row) {
+                $data = [
+                    'name' => $row['name'],
+                    'phone' => $row['phone'],
+                    'card_number' => $row['card_number'],
+                    'plate_number' => $row['plate_number'],
+                    'expired_date' => Member::parseExcelDate($row['expired_date']),
+                ];
+
+                Member::updateOrCreate(['card_number' => $row['card_number']], $data);
+            }
+
+            return response(['message' => 'Data telah diimport'], 201);
+        });
+
+        return $response;
     }
 
     public function export(Request $request)

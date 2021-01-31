@@ -4,35 +4,35 @@
 			<h3 class="text-muted mt-2">KELOLA MEMBER</h3>
 			<el-form inline @submit.native.prevent>
 				<el-form-item class="mb-0">
-					<el-button
-						@click="openForm({})"
-						type="primary"
-						icon="el-icon-plus"
-						size="small"
-						title="Tambah Member"
-					></el-button>
-				</el-form-item>
-
-				<el-form-item class="mb-0">
-					<el-button
-						@click="exportData"
-						type="primary"
-						icon="el-icon-download"
-						size="small"
-						title="Download Member"
-						plain
-					></el-button>
-				</el-form-item>
-
-				<el-form-item class="mb-0">
-					<el-button
-						@click="openForm({})"
-						type="primary"
-						icon="el-icon-upload2"
-						size="small"
-						title="Upload Member"
-						plain
-					></el-button>
+					<el-dropdown type="primary">
+						<el-button type="primary" size="mini" icon="el-icon-s-tools">
+							AKSI <i class="el-icon-arrow-down el-icon--right"></i>
+						</el-button>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item
+								@click.native.prevent="openForm({})"
+								icon="el-icon-plus"
+								>Tambah Member</el-dropdown-item
+							>
+							<el-dropdown-item
+								@click.native.prevent="triggerOpenFile"
+								icon="el-icon-upload2"
+							>
+								Upload Member
+							</el-dropdown-item>
+							<el-dropdown-item
+								@click.native.prevent="exportData"
+								icon="el-icon-download"
+								>Download Member</el-dropdown-item
+							>
+						</el-dropdown-menu>
+					</el-dropdown>
+					<input
+						type="file"
+						style="display: none"
+						id="input-file"
+						@change="readFile"
+					/>
 				</el-form-item>
 
 				<el-form-item class="mb-0">
@@ -226,14 +226,84 @@
 
 <script>
 import crud from '../mixins/crud';
+import XLSX from 'xlsx';
 
 export default {
   mixins: [crud],
+
   data() {
     return {
       url: '/api/member',
       paginated: true
     }
+  },
+
+  methods: {
+    triggerOpenFile() {
+      const f = document.getElementById('input-file');
+      f.click();
+    },
+
+    readFile(oEvent) {
+      this.loading = true
+			var oFile = oEvent.target.files[0]
+			var reader = new FileReader()
+
+			reader.onload = (e) => {
+				var data = e.target.result
+				data = new Uint8Array(data)
+				var workbook = XLSX.read(data, { type: 'array' })
+				var result = {}
+				// see the result, caution: it works after reader event is done.
+				var res = XLSX.utils
+					.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 })
+					.filter((r) => !!r[0]) // cuma yg ada datanya
+
+				// remove header
+				res.splice(0, 1)
+
+				var dataToImport = res.map((r) => {
+					return {
+						name: r[1] || '',
+						phone: r[2] || '',
+						card_number: r[3] || '',
+						plate_number: r[4] || '',
+						expired_date: r[5] || '',
+					}
+				})
+
+				console.log('raw data: ', dataToImport.length)
+				this.importData(dataToImport)
+			}
+
+			reader.readAsArrayBuffer(oFile)
+    },
+
+    importData(dataToImport) {
+			this.loading = true;
+			this.$axios
+				.$post("/api/member/import", { rows: dataToImport })
+				.then((r) => {
+					this.$message({
+						message: r.message,
+            type: "success",
+            showClose: true
+					});
+					this.pagination.current_page = 1;
+					this.fetchData();
+				})
+				.catch((e) => {
+					this.$message({
+						message: e.response.data.message,
+						type: "error",
+						showClose: true,
+					});
+				})
+				.finally(() => {
+					this.loading = false;
+					document.getElementById("input-file").value = "";
+				});
+		},
   }
 }
 </script>
