@@ -23,14 +23,21 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('accessLog', [AccessLogController::class, 'store']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+    // AUTH RELATED
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
 
+    // MASTER DATA
     Route::resource('user', UserController::class)->except(['create', 'edit']);
     Route::resource('accessGate', AccessGateController::class)->except(['create', 'edit']);
-    Route::get('accessLogs', [AccessLogController::class, 'index']);
     Route::resource('camera', CameraController::class)->except(['create', 'edit']);
-    Route::resource('member', MemberController::class)->except(['create', 'edit']);
 
+    // ACCESS LOG RELATED
+    Route::get('accessLogs', [AccessLogController::class, 'index']);
     Route::get('accessLogs/export', [AccessLogController::class, 'export']);
+
+    // MEMBER RELATED
+    Route::get('member/export', [MemberController::class, 'export']);
+    Route::post('member/import', [MemberController::class, 'import']);
+    Route::resource('member', MemberController::class)->except(['create', 'edit']);
 });

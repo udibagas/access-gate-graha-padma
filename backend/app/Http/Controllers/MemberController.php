@@ -82,4 +82,33 @@ class MemberController extends Controller
     {
         // TODO
     }
+
+    public function export(Request $request)
+    {
+        $data = Member::when($request->keyword, function ($q) use ($request) {
+            $q->where('name', 'LIKE', "%{$request->keyword}%");
+        })->when($request->expired, function ($q) use ($request) {
+            if ($request->expired[0] == 'yes') {
+                $q->whereRaw('DATE(NOW()) > expired_date');
+            }
+
+            if ($request->expired[0] == 'no') {
+                $q->whereRaw('DATE(NOW()) <= expired_date OR expired_date IS NULL');
+            }
+        })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc')->get();
+
+        return [
+            'filename' => 'Data-Member-' . date('Y-m-d-H-i-s') . '.xls',
+            'data' => $data->map(function ($item, $index) {
+                return [
+                    'No' => ++$index,
+                    'Nama' => $item->name,
+                    'No HP' => $item->phone,
+                    'Nomor Kartu' => $item->card_number,
+                    'Plat Nomor' => $item->plate_number,
+                    'Masa Berlaku' => $item->expired_date
+                ];
+            })
+        ];
+    }
 }

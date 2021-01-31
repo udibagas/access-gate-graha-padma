@@ -15,11 +15,11 @@
 
 				<el-form-item class="mb-0">
 					<el-button
-						@click="openForm({})"
+						@click="exportData"
 						type="primary"
 						icon="el-icon-download"
 						size="small"
-						title="Export Member"
+						title="Download Member"
 						plain
 					></el-button>
 				</el-form-item>
@@ -30,7 +30,7 @@
 						type="primary"
 						icon="el-icon-upload2"
 						size="small"
-						title="Import Member"
+						title="Upload Member"
 						plain
 					></el-button>
 				</el-form-item>
@@ -94,7 +94,7 @@
 
 			<el-table-column
 				prop="readable_expired_date"
-				label="Expired Date"
+				label="Masa Berlaku"
 				align="center"
 				header-align="center"
 				width="150"
