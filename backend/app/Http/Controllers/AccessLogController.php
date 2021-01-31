@@ -101,6 +101,7 @@ class AccessLogController extends Controller
                     'Jenis' => $item->accessGate->type,
                     'Nama' => $item->member->name,
                     'Nomor Kartu' => $item->member->card_number,
+                    'Plat Nomor' => $item->member->plate_number,
                 ];
             });
 

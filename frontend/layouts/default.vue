@@ -17,6 +17,7 @@
 					<el-menu-item index="/camera">Camera</el-menu-item>
 					<el-menu-item index="/snapshot">Snapshot</el-menu-item>
 					<el-menu-item index="/user">User</el-menu-item>
+					<el-menu-item index="/setting">Setting</el-menu-item>
 				</el-menu>
 				<el-dropdown>
 					<span class="el-dropdown-link">

@@ -4,14 +4,30 @@
 			<h3 class="text-muted mt-2">ACCESS LOG</h3>
 			<el-form inline @submit.native.prevent>
 				<el-form-item class="mb-0">
-					<el-button
-						@click="exportData"
-						type="primary"
-						icon="el-icon-download"
-						size="small"
-						title="Download Log"
-						plain
-					></el-button>
+					<el-dropdown type="primary">
+						<el-button type="primary" size="mini" icon="el-icon-s-tools">
+							AKSI <i class="el-icon-arrow-down el-icon--right"></i>
+						</el-button>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item
+								@click.native.prevent="exportData"
+								icon="el-icon-download"
+								>Download Log</el-dropdown-item
+							>
+							<!-- TODO -->
+							<el-dropdown-item
+								@click.native.prevent="exportData"
+								icon="el-icon-printer"
+								>Print Log</el-dropdown-item
+							>
+							<el-dropdown-item
+								@click.native.prevent="triggerOpenFile"
+								icon="el-icon-delete"
+							>
+								Hapus Log
+							</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
 				</el-form-item>
 
 				<el-form-item class="mb-0">
@@ -91,6 +107,11 @@
 			<el-table-column
 				prop="member.card_number"
 				label="Nomor Kartu"
+			></el-table-column>
+
+			<el-table-column
+				prop="member.plate_number"
+				label="Plat Nomor"
 			></el-table-column>
 
 			<el-table-column align="center" header-align="center" width="60">

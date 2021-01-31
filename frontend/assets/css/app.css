@@ -25,3 +25,7 @@
 .bg-navy {
   background: navy;
 }
+
+.el-card__header {
+  background-color: #efefef;
+}

@@ -18,12 +18,18 @@
 								@click.native.prevent="triggerOpenFile"
 								icon="el-icon-upload2"
 							>
-								Upload Member
+								Upload Data Member
 							</el-dropdown-item>
+							<!-- TODO -->
+							<el-dropdown-item
+								@click.native.prevent="exportData"
+								icon="el-icon-printer"
+								>Print Data Member</el-dropdown-item
+							>
 							<el-dropdown-item
 								@click.native.prevent="exportData"
 								icon="el-icon-download"
-								>Download Member</el-dropdown-item
+								>Download Data Member</el-dropdown-item
 							>
 						</el-dropdown-menu>
 					</el-dropdown>
