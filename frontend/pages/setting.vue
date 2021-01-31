@@ -14,11 +14,26 @@
 				</el-form-item>
 			</el-form>
 		</div>
+
+		<el-form label-width="150px" label-position="left">
+			<el-form-item label="Hapus Log Umur">
+				<el-input v-model="form.hapus_log"></el-input>
+			</el-form-item>
+		</el-form>
 	</el-card>
 </template>
 
 <script>
 export default {
-
+  data() {
+    return {
+      form: {}
+    }
+  },
+  methods: {
+    save() {
+      // TODO
+    }
+  }
 }
 </script>

@@ -70,9 +70,9 @@ class AccessLogController extends Controller
      * @param  \App\Models\AccessLog  $accessLog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AccessLog $accessLog)
+    public function destroy()
     {
-        $accessLog->delete();
+        AccessLog::truncate();
         return ['message' => 'Data telah dihapus'];
     }
 

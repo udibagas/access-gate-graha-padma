@@ -21,7 +21,7 @@
 								>Print Log</el-dropdown-item
 							>
 							<el-dropdown-item
-								@click.native.prevent="triggerOpenFile"
+								@click.native.prevent="deleteLog"
 								icon="el-icon-delete"
 							>
 								Hapus Log
@@ -216,6 +216,25 @@ export default {
     showSnapshot(data) {
       this.snapshotDialog = true;
       this.selectedData = data;
+    },
+
+    deleteLog() {
+      this.$confirm('Anda yakin akan menghapus semua log?', 'Konfirmasi', { type: 'warning' }).then(() => {
+        this.$axios.$delete('/api/accessLogs').then(r => {
+          this.$message({
+            message: r.message,
+            type: 'success',
+            showClose: true
+          });
+          this.fetchData();
+        }).catch(e => {
+          this.$message({
+            message: e.response.data.message,
+            type: 'error',
+            showClose: true
+          })
+        });
+      }).catch(e => console.log(e));
     }
   },
 
