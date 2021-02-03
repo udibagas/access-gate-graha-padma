@@ -77,7 +77,7 @@ export default {
             propertyName: false
           },
           csrf: {
-            url: 'sanctum/csrf-cookie'
+            url: '/sanctum/csrf-cookie'
           }
         },
         tokenType: false,
