@@ -37,9 +37,9 @@
 export default {
   layout: 'login',
 
-  created() {
-    this.$axios.$get('sanctum/csrf-cookie')
-  },
+  // created() {
+  //   this.$axios.$get('sanctum/csrf-cookie')
+  // },
 
   data() {
     return {
