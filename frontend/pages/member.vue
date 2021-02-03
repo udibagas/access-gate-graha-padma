@@ -21,11 +21,11 @@
 								Upload Data Member
 							</el-dropdown-item>
 							<!-- TODO -->
-							<el-dropdown-item
+							<!-- <el-dropdown-item
 								@click.native.prevent="exportData"
 								icon="el-icon-printer"
 								>Print Data Member</el-dropdown-item
-							>
+							> -->
 							<el-dropdown-item
 								@click.native.prevent="exportData"
 								icon="el-icon-download"

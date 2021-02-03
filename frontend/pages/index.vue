@@ -15,11 +15,11 @@
 								>Download Log</el-dropdown-item
 							>
 							<!-- TODO -->
-							<el-dropdown-item
+							<!-- <el-dropdown-item
 								@click.native.prevent="exportData"
 								icon="el-icon-printer"
 								>Print Log</el-dropdown-item
-							>
+							> -->
 							<el-dropdown-item
 								@click.native.prevent="deleteLog"
 								icon="el-icon-delete"
