@@ -50,12 +50,50 @@
 			<el-table-column prop="user" label="User"></el-table-column>
 			<el-table-column prop="pass" label="Pass"></el-table-column>
 
-			<ActionColumn
-				@refreshData="refreshData"
-				@openForm="openForm"
-				@deleteData="deleteData"
-			/>
+			<el-table-column
+				fixed="right"
+				width="60"
+				header-align="center"
+				align="center"
+			>
+				<template slot="header">
+					<el-button
+						type="text"
+						icon="el-icon-refresh"
+						@click="$emit('refreshData')"
+					></el-button>
+				</template>
+
+				<template slot-scope="scope">
+					<el-dropdown>
+						<span class="el-dropdown-link">
+							<i class="el-icon-more"></i>
+						</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item
+								icon="el-icon-camera"
+								@click.native.prevent="testCamera(scope.row.id)"
+								>Test Camera</el-dropdown-item
+							>
+							<el-dropdown-item
+								icon="el-icon-edit"
+								@click.native.prevent="$emit('openForm', scope.row)"
+								>Edit</el-dropdown-item
+							>
+							<el-dropdown-item
+								icon="el-icon-delete"
+								@click.native.prevent="$emit('deleteData', scope.row.id)"
+								>Delete</el-dropdown-item
+							>
+						</el-dropdown-menu>
+					</el-dropdown>
+				</template>
+			</el-table-column>
 		</el-table>
+
+		<el-dialog title="SNAPSHOT KAMERA" center :visible.sync="showSnapshot">
+			<img :src="snapshot" alt="" style="width: 100%" />
+		</el-dialog>
 
 		<Pagination
 			@current-change="currentChange"
@@ -127,8 +165,27 @@ export default {
   mixins: [crud],
   data() {
     return {
-      url: '/api/camera'
+      url: '/api/camera',
+      showSnapshot: false,
+      snapshot: null
     }
+  },
+
+  methods: {
+    testCamera(id) {
+			this.$axios
+				.$get(`/api/camera/test/${id}`)
+				.then(data => {
+					this.snapshot = "data:image/jpeg;base64," + data.snapshot;
+					this.showSnapshot = true;
+				})
+				.catch((e) => {
+					this.$message({
+						message: e.response.data.message,
+						type: "error",
+					});
+				});
+		},
   }
 }
 </script>

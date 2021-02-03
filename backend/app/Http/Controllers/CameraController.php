@@ -76,8 +76,8 @@ class CameraController extends Controller
         $client = new Client(['timeout' => 3]);
 
         try {
-            $response = $client->request('GET', $camera->snapshot_url, [
-                'auth' => [$camera->username, $camera->password, 'digest']
+            $response = $client->request('GET', $camera->url, [
+                'auth' => [$camera->user, $camera->pass, 'digest']
             ]);
 
             if ($response->getHeader('Content-Type')[0] != 'image/jpeg') {
