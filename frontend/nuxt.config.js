@@ -75,6 +75,9 @@ export default {
             url: '/api/me',
             method: 'get',
             propertyName: false
+          },
+          csrf: {
+            url: 'sanctum/csrf-cookie'
           }
         },
         tokenType: false,
