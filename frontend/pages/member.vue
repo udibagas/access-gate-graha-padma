@@ -76,18 +76,13 @@
 
 			<el-table-column prop="name" label="Nama"></el-table-column>
 
-			<el-table-column
-				prop="phone"
-				label="Nomor HP"
-				width="200"
-			></el-table-column>
+			<el-table-column prop="phone" label="Nomor HP"></el-table-column>
 
 			<el-table-column
 				prop="card_number"
 				label="Nomor Kartu"
 				align="center"
 				header-align="center"
-				width="200"
 			></el-table-column>
 
 			<el-table-column
@@ -95,7 +90,6 @@
 				label="Plat Nomor"
 				align="center"
 				header-align="center"
-				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -103,7 +97,6 @@
 				label="Masa Berlaku"
 				align="center"
 				header-align="center"
-				width="150"
 			></el-table-column>
 
 			<el-table-column

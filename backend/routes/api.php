@@ -27,6 +27,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
 
+    // TEST RELATED
+    Route::get('camera/test/{camera}', [CameraController::class, 'test']);
+
     // MASTER DATA
     Route::resource('user', UserController::class)->except(['create', 'edit']);
     Route::resource('accessGate', AccessGateController::class)->except(['create', 'edit']);
