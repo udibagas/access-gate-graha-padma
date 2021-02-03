@@ -77,12 +77,12 @@
 							>
 							<el-dropdown-item
 								icon="el-icon-edit"
-								@click.native.prevent="$emit('openForm', scope.row)"
+								@click.native.prevent="openForm(scope.row)"
 								>Edit</el-dropdown-item
 							>
 							<el-dropdown-item
 								icon="el-icon-delete"
-								@click.native.prevent="$emit('deleteData', scope.row.id)"
+								@click.native.prevent="deleteData(scope.row.id)"
 								>Delete</el-dropdown-item
 							>
 						</el-dropdown-menu>
