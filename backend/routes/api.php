@@ -5,6 +5,7 @@ use App\Http\Controllers\AccessLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\SnapshotController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,4 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('member/export', [MemberController::class, 'export']);
     Route::post('member/import', [MemberController::class, 'import']);
     Route::resource('member', MemberController::class)->except(['create', 'edit']);
+
+    Route::delete('snapshot/delete', [SnapshotController::class, 'destroy']);
+    Route::get('snapshot', [SnapshotController::class, 'index']);
 });
