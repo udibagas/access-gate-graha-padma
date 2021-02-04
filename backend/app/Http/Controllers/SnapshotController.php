@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Snapshot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,14 +14,14 @@ class SnapshotController extends Controller
         $files  = Storage::files($request->directory);
 
         return array_map(function ($node) {
-            $nodes = explode('/', $node);
+            $nodes  = explode('/', $node);
             $isFile = strpos($node, '.') !== false;
 
             return [
-                'label' => $nodes[count($nodes) - 1],
-                'path' => $node,
-                'isFile' => $isFile,
-                'url' => Storage::url($node)
+                'label'     => $nodes[count($nodes) - 1],
+                'path'      => $node,
+                'isFile'    => $isFile,
+                'url'       => Storage::url($node)
             ];
         }, array_merge($dirs, $files));
     }
@@ -34,6 +35,7 @@ class SnapshotController extends Controller
 
             if ($node->isFile) {
                 Storage::delete($node->path);
+                Snapshot::where('path', $node->path)->delete();
             } else {
                 Storage::deleteDirectory($node->path);
             }
