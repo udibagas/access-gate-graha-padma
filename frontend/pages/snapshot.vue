@@ -22,11 +22,12 @@
 				style="width: 350px; height: calc(100vh - 115px)"
 			>
 				<el-tree
-					v-if="show"
 					:props="props"
 					:load="loadNode"
+					ref="tree"
 					lazy
 					show-checkbox
+					highlight-current
 					node-key="path"
 					@node-click="({ isFile, url }) => (this.url = isFile ? url : '')"
 					@check="(node, tree) => (checkedNodes = tree.checkedNodes)"
@@ -37,7 +38,7 @@
 			<div
 				class="p-3 flex-grow-1 d-flex align-items-center justify-content-center flex-column"
 			>
-				<img :src="url" alt="" style="width: 100%" />
+				<img :src="url" alt="" style="max-width: 800px" />
 			</div>
 		</div>
 	</el-card>
@@ -47,9 +48,9 @@
 export default {
   data() {
     return {
-      show: true,
       url: '',
       checkedNodes: [],
+      expandedNodes: [],
       props: {
         label: 'label',
         isLeaf: 'isFile',
@@ -66,11 +67,10 @@ export default {
     deleteSnapshot() {
       this.$confirm('Anda yakin?', 'Konfirmasi', { type: 'warning' }).then(() => {
         this.$axios.$post('api/snapshot/delete', { checkedNodes: this.checkedNodes }).then(data => {
-          this.$message({
-            message: data.message,
-            type: 'success'
-          });
-          this.reload();
+          this.url = '';
+          this.$message({ message: data.message, type: 'success' });
+          this.checkedNodes.forEach(node => this.$refs.tree.remove(node));
+          this.checkedNodes = [];
         }).catch(e => {
           this.$message({
             message: e.response.data.message,
@@ -79,14 +79,6 @@ export default {
         });
       }).catch(e => console.log(e));
     },
-
-    reload() {
-			this.show = false;
-			this.$nextTick(() => {
-        this.show = true;
-        this.url = '';
-			});
-		},
   }
 }
 </script>
