@@ -65,8 +65,7 @@ export default {
 
     deleteSnapshot() {
       this.$confirm('Anda yakin?', 'Konfirmasi', { type: 'warning' }).then(() => {
-        const params = { checkedNodes: this.checkedNodes };
-        this.$axios.$delete('api/snapshot/delete', { params }).then(data => {
+        this.$axios.$post('api/snapshot/delete', { checkedNodes: this.checkedNodes }).then(data => {
           this.$message({
             message: data.message,
             type: 'success'

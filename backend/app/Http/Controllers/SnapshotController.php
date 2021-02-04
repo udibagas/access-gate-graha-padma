@@ -31,13 +31,11 @@ class SnapshotController extends Controller
         $request->validate(['checkedNodes' => 'required']);
 
         foreach ($request->checkedNodes as $node) {
-            $node = json_decode($node);
-
-            if ($node->isFile) {
-                Storage::delete($node->path);
-                Snapshot::where('path', $node->path)->delete();
+            if ($node['isFile']) {
+                Storage::delete($node['path']);
+                Snapshot::where('path', $node['path'])->delete();
             } else {
-                Storage::deleteDirectory($node->path);
+                Storage::deleteDirectory($node['path']);
             }
         }
 
