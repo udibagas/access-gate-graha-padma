@@ -56,10 +56,8 @@ export default {
         if (e.response.status == 422) {
           message = e.response.data.errors.email
             ? e.response.data.errors.email[0]
-            : e.response.data.errors.password[0]
-        }
-
-        if (e.response.status == 401) {
+            : e.response.data.errors.password[0];
+        } else {
           message = e.response.data.message;
         }
 
