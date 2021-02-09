@@ -23,15 +23,15 @@ def check_card(card_number):
 
 def open_gate():
     print('GATE OPENED')
-    # GPIO.output(PIN_RELAY, 1)
-    # time.sleep(1)
-    # GPIO.output(PIN_RELAY, 0)
+    GPIO.output(PIN_RELAY, 1)
+    time.sleep(1)
+    GPIO.output(PIN_RELAY, 0)
 
 
 if __name__ == "__main__":
-    # GPIO.setmode(GPIO.BOARD)
-    # GPIO.setwarnings(False)
-    # GPIO.setup(PIN_RELAY, GPIO.OUT)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setwarnings(False)
+    GPIO.setup(PIN_RELAY, GPIO.OUT)
 
     device = InputDevice(DEVICE)
     number = ''
