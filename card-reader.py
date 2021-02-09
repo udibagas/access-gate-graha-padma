@@ -7,6 +7,7 @@ import time
 DEVICE = '/dev/input/event3'
 API_URL = 'http://localhost:8000/api'
 PIN_RELAY = 36
+CARD_NUMBER_LENGTH = 10
 
 
 def check_card(card_number):
@@ -43,6 +44,6 @@ if __name__ == "__main__":
             if key.keycode in allowed_keys:
                 number += str(allowed_keys.index(key.keycode))
 
-            if len(number) == 10 or key.keycode == 'KEY_ENTER':
+            if len(number) == CARD_NUMBER_LENGTH or key.keycode == 'KEY_ENTER':
                 check_card(number)
                 number = ''
