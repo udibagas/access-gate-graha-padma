@@ -51,14 +51,17 @@ class AccessLogController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['card_number' => 'required|exists:members,card_number']);
-
         $member = Member::where('card_number', $request->card_number)->first();
-        $gate   = AccessGate::where('host', $request->ip())->first();
+
+        if (!$member) {
+            return response('UNREGISTERED', 404);
+        }
 
         if ($member->is_expired) {
             return response('EXPIRED', 403);
         }
+
+        $gate   = AccessGate::where('host', $request->ip())->first();
 
         $accessLog = AccessLog::create([
             'member_id' => $member->id,
