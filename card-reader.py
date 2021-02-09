@@ -15,6 +15,7 @@ CARD_NUMBER_LENGTH = 10
 
 def check_card(card_number):
     payload = {'card_number': card_number}
+
     try:
         r = requests.post(API_URL + '/accessLog', json=payload, timeout=3)
         print(r.text)
@@ -51,6 +52,5 @@ if __name__ == "__main__":
                 number += str(allowed_keys.index(key.keycode))
 
             if len(number) == CARD_NUMBER_LENGTH or key.keycode == 'KEY_ENTER':
-                # make as thread
                 threading.Thread(target=check_card, args=(number,)).start()
                 number = ''
