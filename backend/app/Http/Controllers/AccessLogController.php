@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AccessLogRequest;
 use App\Jobs\TakeSnapshot;
+use App\Models\AccessGate;
 use App\Models\AccessLog;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class AccessLogController extends Controller
@@ -13,6 +15,7 @@ class AccessLogController extends Controller
     {
         $this->middleware('registeredDevice')->only('store');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,11 +49,24 @@ class AccessLogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AccessLogRequest $request)
+    public function store(Request $request)
     {
-        $accessLog = AccessLog::create($request->all());
-        // TakeSnapshot::dispatch($accessLog);
-        return ['message' => 'Data telah disimpan'];
+        $request->validate(['card_number' => 'required|exists:members,card_number']);
+
+        $member = Member::where('card_number', $request->card_number)->first();
+        $gate   = AccessGate::where('host', $request->ip())->first();
+
+        if ($member->is_expired) {
+            return response('EXPIRED', 403);
+        }
+
+        $accessLog = AccessLog::create([
+            'member_id' => $member->id,
+            'access_gate_id' => $gate->id
+        ]);
+
+        TakeSnapshot::dispatch($accessLog);
+        return response('OK');
     }
 
     /**

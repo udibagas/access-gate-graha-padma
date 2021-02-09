@@ -20,8 +20,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "member_id": 1,
-    "access_gate_id": 1
+    "card_number": "1234567890"
 }
 
 ###
