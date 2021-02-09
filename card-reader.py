@@ -3,6 +3,7 @@ from evdev import InputDevice, categorize, ecodes, KeyEvent
 import requests
 import time
 from RPi import GPIO
+import threading
 
 DEVICE = '/dev/input/event0'
 API_URL = 'http://192.168.1.97/api'
@@ -16,22 +17,19 @@ def check_card(card_number):
     payload = {'card_number': card_number}
     try:
         r = requests.post(API_URL + '/accessLog', json=payload, timeout=3)
-        #print(r.text)
+        print(r.text)
         if r.status_code == 200:
-            open_gate()
+            print('GATE OPENED')
+            GPIO.output(PIN_RELAY, 1)
+            GPIO.output(PIN_GREEN, 1)
+            time.sleep(2)
+            GPIO.output(PIN_RELAY, 0)
+            GPIO.output(PIN_GREEN, 0)
     except Exception as e:
+        print(e)
         GPIO.output(PIN_YELLOW, 1)
         time.sleep(2)
         GPIO.output(PIN_YELLOW, 0)
-
-
-def open_gate():
-    #print('GATE OPENED')
-    GPIO.output(PIN_RELAY, 1)
-    GPIO.output(PIN_GREEN, 1)
-    time.sleep(2)
-    GPIO.output(PIN_RELAY, 0)
-    GPIO.output(PIN_GREEN, 0)
 
 
 if __name__ == "__main__":
@@ -53,5 +51,6 @@ if __name__ == "__main__":
                 number += str(allowed_keys.index(key.keycode))
 
             if len(number) == CARD_NUMBER_LENGTH or key.keycode == 'KEY_ENTER':
-                check_card(number)
+                # make as thread
+                threading.Thread(target=check_card, args=(number,)).start()
                 number = ''
