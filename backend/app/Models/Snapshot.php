@@ -14,6 +14,8 @@ class Snapshot extends Model
 
     protected $appends = ['url'];
 
+    protected $with = ['camera'];
+
     public function camera()
     {
         return $this->belongsTo(Camera::class);
