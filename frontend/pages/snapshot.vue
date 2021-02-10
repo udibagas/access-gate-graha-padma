@@ -19,7 +19,7 @@
 		<div class="d-flex">
 			<div
 				class="p-3 border-end"
-				style="width: 350px; height: calc(100vh - 115px); overflow: auto"
+				style="width: 400px; height: calc(100vh - 115px); overflow: auto"
 			>
 				<el-tree
 					:props="props"
