@@ -12,7 +12,7 @@ class Snapshot extends Model
 
     protected $fillable = ['access_log_id', 'camera_id', 'filename', 'path'];
 
-    protected $appends = ['url'];
+    protected $appends = ['url', 'time'];
 
     protected $with = ['camera'];
 
@@ -24,5 +24,10 @@ class Snapshot extends Model
     public function getUrlAttribute()
     {
         return url(Storage::url($this->path));
+    }
+
+    public function getTimeAttribute()
+    {
+        return $this->created_at->format('d-M-Y H:i:s');
     }
 }
