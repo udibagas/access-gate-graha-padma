@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberRequest;
+use App\Models\AccessLog;
 use App\Models\Member;
+use App\Models\Snapshot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
@@ -17,7 +20,11 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $resource = Member::when($request->keyword, function ($q) use ($request) {
-            $q->where('name', 'LIKE', "%{$request->keyword}%");
+            $q->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
+            });
         })->when($request->expired, function ($q) use ($request) {
             if ($request->expired[0] == 'yes') {
                 $q->whereRaw('DATE(NOW()) > expired_date');
@@ -76,6 +83,25 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         $member->delete();
+
+        if ($member->accessLogs) {
+            Storage::delete($member->accessLogs->map(function ($i) {
+                return $i->path;
+            }));
+
+            $member->accessLogs->delete();
+        }
+
+        return ['message' => 'Data telah dihapus'];
+    }
+
+    public function deleteAll()
+    {
+        Member::truncate();
+        AccessLog::truncate();
+        Snapshot::truncate();
+        Storage::deleteDirectory('snapshots');
+
         return ['message' => 'Data telah dihapus'];
     }
 
@@ -105,7 +131,11 @@ class MemberController extends Controller
     public function export(Request $request)
     {
         $data = Member::when($request->keyword, function ($q) use ($request) {
-            $q->where('name', 'LIKE', "%{$request->keyword}%");
+            $q->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
+            });
         })->when($request->expired, function ($q) use ($request) {
             if ($request->expired[0] == 'yes') {
                 $q->whereRaw('DATE(NOW()) > expired_date');

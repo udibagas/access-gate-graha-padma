@@ -14,6 +14,11 @@ class Member extends Model
 
     protected $appends = ['is_expired', 'readable_expired_date'];
 
+    public function accessLogs()
+    {
+        return $this->hasMany(AccessLog::class);
+    }
+
     public static function parseExcelDate($date)
     {
         if ($date === null) {

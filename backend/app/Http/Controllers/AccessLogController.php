@@ -7,6 +7,7 @@ use App\Jobs\TakeSnapshot;
 use App\Models\AccessGate;
 use App\Models\AccessLog;
 use App\Models\Member;
+use App\Models\Snapshot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -93,6 +94,7 @@ class AccessLogController extends Controller
     public function destroy()
     {
         AccessLog::truncate();
+        Snapshot::truncate();
         Storage::deleteDirectory('snapshots');
         return ['message' => 'Data telah dihapus'];
     }

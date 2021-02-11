@@ -31,6 +31,11 @@
 								icon="el-icon-download"
 								>Download Data Member</el-dropdown-item
 							>
+							<el-dropdown-item
+								@click.native.prevent="deleteAll"
+								icon="el-icon-delete"
+								>Hapus Semua Data Member</el-dropdown-item
+							>
 						</el-dropdown-menu>
 					</el-dropdown>
 					<input
@@ -241,6 +246,26 @@ export default {
     triggerOpenFile() {
       const f = document.getElementById('input-file');
       f.click();
+    },
+
+    deleteAll() {
+      this.$confirm('Anda yakin akan menghaus semua data member?', 'Konfirmasi', { type: 'warning' }).then(() => {
+        this.loading = true;
+        this.$axios.$delete(`${this.url}/deleteAll`).then(r => {
+          this.$message({
+            message: r.message,
+            type: 'success',
+            showClose: true
+          });
+          this.refreshData();
+        }).catch(e => {
+          this.$message({
+            message: e.response.data.message,
+            type: 'error',
+            showClose: true
+          });
+        }).finally(() => this.loading = false)
+      }).catch(e => console.log(e));
     },
 
     readFile(oEvent) {

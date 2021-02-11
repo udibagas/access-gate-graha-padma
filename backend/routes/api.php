@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // MEMBER RELATED
     Route::get('member/export', [MemberController::class, 'export']);
     Route::post('member/import', [MemberController::class, 'import']);
+    Route::delete('member/deleteAll', [MemberController::class, 'deleteAll']);
     Route::resource('member', MemberController::class)->except(['create', 'edit']);
 
     Route::post('snapshot/delete', [SnapshotController::class, 'destroy']);

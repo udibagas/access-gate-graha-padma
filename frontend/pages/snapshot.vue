@@ -13,6 +13,15 @@
 						>HAPUS SNAPSHOT</el-button
 					>
 				</el-form-item>
+				<el-form-item class="mb-0">
+					<el-button
+						icon="el-icon-refresh"
+						type="primary"
+						plain
+						size="small"
+						@click="refresh"
+					></el-button>
+				</el-form-item>
 			</el-form>
 		</div>
 
@@ -22,6 +31,7 @@
 				style="width: 400px; height: calc(100vh - 115px); overflow: auto"
 			>
 				<el-tree
+					v-if="show"
 					:props="props"
 					:load="loadNode"
 					ref="tree"
@@ -49,6 +59,7 @@ export default {
   data() {
     return {
       url: '',
+      show: true,
       checkedNodes: [],
       expandedNodes: [],
       props: {
@@ -79,9 +90,11 @@ export default {
         });
       }).catch(e => console.log(e));
     },
+
+    refresh() {
+      this.show = false;
+      this.$nextTick(() => this.show = true);
+    }
   }
 }
 </script>
-
-<style>
-</style>
