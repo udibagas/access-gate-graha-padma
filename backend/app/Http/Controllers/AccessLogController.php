@@ -29,7 +29,8 @@ class AccessLogController extends Controller
             $q->whereHas('member', function ($q) use ($request) {
                 $q->where(function ($q) use ($request) {
                     $q->where('name', 'LIKE', "%{$request->keyword}%")
-                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%");
+                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
                 });
             });
         })->when($request->access_gate_id, function ($q) use ($request) {
@@ -105,7 +106,8 @@ class AccessLogController extends Controller
             $q->whereHas('member', function ($q) use ($request) {
                 $q->where(function ($q) use ($request) {
                     $q->where('name', 'LIKE', "%{$request->keyword}%")
-                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%");
+                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
                 });
             });
         })->when($request->access_gate_id, function ($q) use ($request) {
