@@ -33,6 +33,10 @@ class MemberController extends Controller
             if ($request->expired[0] == 'no') {
                 $q->whereRaw('DATE(NOW()) <= expired_date OR expired_date IS NULL');
             }
+        })->when($request->group, function ($q) use ($request) {
+            $q->where('group', (int) $request->group[0]);
+        })->when($request->active, function ($q) use ($request) {
+            $q->where('active', (int) $request->active[0]);
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
         return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
@@ -144,6 +148,10 @@ class MemberController extends Controller
             if ($request->expired[0] == 'no') {
                 $q->whereRaw('DATE(NOW()) <= expired_date OR expired_date IS NULL');
             }
+        })->when($request->group, function ($q) use ($request) {
+            $q->where('group', (int) $request->group);
+        })->when($request->active, function ($q) use ($request) {
+            $q->where('active', (int) $request->active);
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc')->get();
 
         return [

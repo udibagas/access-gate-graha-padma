@@ -10,9 +10,16 @@ class Member extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'phone', 'card_number', 'expired_date', 'plate_number'];
+    const GROUP_ADMIN = 1;
 
-    protected $appends = ['is_expired', 'readable_expired_date'];
+    const GROUP_MEMBER = 0;
+
+    protected $fillable = [
+        'name', 'phone', 'card_number', 'expired_date',
+        'plate_number', 'group', 'active'
+    ];
+
+    protected $appends = ['is_expired', 'readable_expired_date', 'group_name', 'status'];
 
     public function accessLogs()
     {
@@ -51,5 +58,15 @@ class Member extends Model
         }
 
         return null;
+    }
+
+    public function getGroupNameAttribute()
+    {
+        return $this->group == self::GROUP_ADMIN ? 'ADMIN' : 'MEMBER';
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->active ? 'AKTIF' : 'TIDAK AKTIF';
     }
 }

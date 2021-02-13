@@ -128,6 +128,32 @@
 				</template>
 			</el-table-column>
 
+			<el-table-column
+				prop="group_name"
+				label="Group"
+				align="center"
+				header-align="center"
+				column-key="group"
+				:filter-multiple="false"
+				:filters="[
+					{ value: '0', text: 'MEMBER' },
+					{ value: '1', text: 'ADMIN' },
+				]"
+			></el-table-column>
+
+			<el-table-column
+				prop="status"
+				label="Status"
+				align="center"
+				header-align="center"
+				column-key="active"
+				:filter-multiple="false"
+				:filters="[
+					{ value: '0', text: 'TIDAK AKTIF' },
+					{ value: '1', text: 'AKTIF' },
+				]"
+			></el-table-column>
+
 			<ActionColumn
 				@refreshData="refreshData"
 				@openForm="openForm"
@@ -206,6 +232,34 @@
 
 					<div class="el-form-item__error" v-if="errors.expired_date">
 						{{ errors.expired_date.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item label="Group" :class="{ 'is-error': errors.group }">
+					<el-select
+						v-model="form.group"
+						placeholder="Group"
+						style="width: 100%"
+					>
+						<el-option :value="0" label="MEMBER"></el-option>
+						<el-option :value="1" label="ADMIN"></el-option>
+					</el-select>
+					<div class="el-form-item__error" v-if="errors.group">
+						{{ errors.group.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item label="Status" :class="{ 'is-error': errors.active }">
+					<el-select
+						v-model="form.active"
+						placeholder="Status"
+						style="width: 100%"
+					>
+						<el-option :value="1" label="AKTIF"></el-option>
+						<el-option :value="0" label="TIDAK AKTIF"></el-option>
+					</el-select>
+					<div class="el-form-item__error" v-if="errors.active">
+						{{ errors.active.join(', ') }}
 					</div>
 				</el-form-item>
 			</el-form>
