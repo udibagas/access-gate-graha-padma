@@ -60,11 +60,31 @@ class AccessLogController extends Controller
             return response('UNREGISTERED', 404);
         }
 
+        if (!$member->active) {
+            return response('INACTIVE', 403);
+        }
+
         if ($member->is_expired) {
             return response('EXPIRED', 403);
         }
 
         $gate   = AccessGate::where('host', $request->ip())->first();
+
+        if ($member->group == Member::GROUP_MEMBER) {
+            $lastAccess = $member->accessLogs()->latest()->first();
+
+            if ($gate->type == 'IN') {
+                if ($lastAccess && $lastAccess->accessGate->type == 'IN') {
+                    return response('BELUM OUT', 403);
+                }
+            }
+
+            if ($gate->type == 'OUT') {
+                if (!$lastAccess || $lastAccess->accessGate->type == 'OUT') {
+                    return response('BELUM IN', 403);
+                }
+            }
+        }
 
         $accessLog = AccessLog::create([
             'member_id' => $member->id,
