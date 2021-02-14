@@ -51,10 +51,15 @@ class MemberController extends Controller
                     return [
                         'No' => ++$index,
                         'Nama' => $item->name,
+                        'Jenis Kelamin' => $item->sex_label,
+                        'No Identitas' => $item->id_number,
+                        'Alamat' => $item->address,
                         'No HP' => $item->phone,
+                        'Group' => $item->group_name,
                         'Nomor Kartu' => $item->card_number,
                         'Plat Nomor' => $item->plate_number,
-                        'Masa Berlaku' => $item->expired_date
+                        'Masa Berlaku' => $item->expired_date,
+                        'Status' => $item->status
                     ];
                 })
             ];

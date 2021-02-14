@@ -79,9 +79,43 @@
 				:index="paginated ? pagination.from : 1"
 			></el-table-column>
 
-			<el-table-column prop="name" label="Nama"></el-table-column>
+			<el-table-column
+				prop="name"
+				label="Nama"
+				show-overflow-tooltip
+			></el-table-column>
 
-			<el-table-column prop="phone" label="Nomor HP"></el-table-column>
+			<el-table-column
+				prop="sex_label"
+				label="Jenis Kelamin"
+				show-overflow-tooltip
+				column-key="sex"
+				align="center"
+				header-align="center"
+				:filter-multiple="false"
+				:filters="[
+					{ text: 'LAKI - LAKI', value: '1' },
+					{ text: 'PEREMPUAN', value: '0' },
+				]"
+			></el-table-column>
+
+			<el-table-column
+				prop="id_number"
+				label="No Identitas"
+				show-overflow-tooltip
+			></el-table-column>
+
+			<el-table-column
+				prop="address"
+				label="Alamat"
+				show-overflow-tooltip
+			></el-table-column>
+
+			<el-table-column
+				prop="phone"
+				label="Nomor HP"
+				show-overflow-tooltip
+			></el-table-column>
 
 			<el-table-column
 				prop="card_number"
@@ -181,6 +215,45 @@
 					<el-input v-model="form.name" placeholder="Nama"></el-input>
 					<div class="el-form-item__error" v-if="errors.name">
 						{{ errors.name.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item label="Jenis Kelamin" :class="{ 'is-error': errors.sex }">
+					<el-select
+						v-model="form.sex"
+						placeholder="Jenis Kelamin"
+						style="width: 100%"
+					>
+						<el-option :value="0" label="PEREMPUAN"></el-option>
+						<el-option :value="1" label="LAKI - LAKI"></el-option>
+					</el-select>
+					<div class="el-form-item__error" v-if="errors.sex">
+						{{ errors.sex.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item
+					label="Nomor Identitas"
+					:class="{ 'is-error': errors.id_number }"
+				>
+					<el-input
+						v-model="form.id_number"
+						placeholder="Nomor Identitas"
+					></el-input>
+					<div class="el-form-item__error" v-if="errors.id_number">
+						{{ errors.id_number.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item label="Alamat" :class="{ 'is-error': errors.address }">
+					<el-input
+						type="textarea"
+						rows="3"
+						v-model="form.address"
+						placeholder="Alamat"
+					></el-input>
+					<div class="el-form-item__error" v-if="errors.address">
+						{{ errors.address.join(', ') }}
 					</div>
 				</el-form-item>
 
