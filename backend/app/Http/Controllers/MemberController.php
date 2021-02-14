@@ -40,6 +40,8 @@ class MemberController extends Controller
             $q->where('group', (int) $request->group[0]);
         })->when($request->active, function ($q) use ($request) {
             $q->where('active', (int) $request->active[0]);
+        })->when($request->sex, function ($q) use ($request) {
+            $q->where('sex', (int) $request->sex[0]);
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
         $data = $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
@@ -143,10 +145,15 @@ class MemberController extends Controller
             foreach ($request->rows as $row) {
                 $data = [
                     'name' => $row['name'],
+                    'sex' => $row['sex'],
+                    'id_number' => $row['id_number'],
+                    'address' => $row['address'],
                     'phone' => $row['phone'],
                     'card_number' => $row['card_number'],
                     'plate_number' => $row['plate_number'],
                     'expired_date' => Member::parseExcelDate($row['expired_date']),
+                    'active' => $row['active'],
+                    'group' => $row['group']
                 ];
 
                 Member::updateOrCreate(['card_number' => $row['card_number']], $data);

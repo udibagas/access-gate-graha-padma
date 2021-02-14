@@ -82,6 +82,7 @@
 			<el-table-column
 				prop="name"
 				label="Nama"
+				width="200"
 				show-overflow-tooltip
 			></el-table-column>
 
@@ -92,6 +93,7 @@
 				column-key="sex"
 				align="center"
 				header-align="center"
+				width="160"
 				:filter-multiple="false"
 				:filters="[
 					{ text: 'LAKI - LAKI', value: '1' },
@@ -102,6 +104,7 @@
 			<el-table-column
 				prop="id_number"
 				label="No Identitas"
+				width="150"
 				show-overflow-tooltip
 			></el-table-column>
 
@@ -109,12 +112,14 @@
 				prop="address"
 				label="Alamat"
 				show-overflow-tooltip
+				width="200"
 			></el-table-column>
 
 			<el-table-column
 				prop="phone"
 				label="Nomor HP"
 				show-overflow-tooltip
+				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -122,6 +127,7 @@
 				label="Nomor Kartu"
 				align="center"
 				header-align="center"
+				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -129,6 +135,7 @@
 				label="Plat Nomor"
 				align="center"
 				header-align="center"
+				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -136,6 +143,7 @@
 				label="Masa Berlaku"
 				align="center"
 				header-align="center"
+				width="150"
 			></el-table-column>
 
 			<el-table-column
@@ -168,6 +176,7 @@
 				align="center"
 				header-align="center"
 				column-key="group"
+				width="150"
 				:filter-multiple="false"
 				:filters="[
 					{ value: '0', text: 'MEMBER' },
@@ -181,6 +190,7 @@
 				align="center"
 				header-align="center"
 				column-key="active"
+				width="150"
 				:filter-multiple="false"
 				:filters="[
 					{ value: '0', text: 'TIDAK AKTIF' },
@@ -209,132 +219,137 @@
 			:visible.sync="showForm"
 			:before-close="closeForm"
 			:close-on-click-modal="false"
+			width="950px"
 		>
-			<el-form label-width="180px" label-position="left">
-				<el-form-item label="Nama" :class="{ 'is-error': errors.name }">
-					<el-input v-model="form.name" placeholder="Nama"></el-input>
-					<div class="el-form-item__error" v-if="errors.name">
-						{{ errors.name.join(', ') }}
-					</div>
-				</el-form-item>
+			<el-form label-width="170px" label-position="left">
+				<el-row :gutter="30">
+					<el-col :span="12">
+						<el-form-item label="Nama" :class="{ 'is-error': errors.name }">
+							<el-input v-model="form.name" placeholder="Nama"></el-input>
+							<div class="el-form-item__error" v-if="errors.name">
+								{{ errors.name.join(', ') }}
+							</div>
+						</el-form-item>
 
-				<el-form-item label="Jenis Kelamin" :class="{ 'is-error': errors.sex }">
-					<el-select
-						v-model="form.sex"
-						placeholder="Jenis Kelamin"
-						style="width: 100%"
-					>
-						<el-option :value="0" label="PEREMPUAN"></el-option>
-						<el-option :value="1" label="LAKI - LAKI"></el-option>
-					</el-select>
-					<div class="el-form-item__error" v-if="errors.sex">
-						{{ errors.sex.join(', ') }}
-					</div>
-				</el-form-item>
+						<el-form-item
+							label="Jenis Kelamin"
+							:class="{ 'is-error': errors.sex }"
+						>
+							<el-radio :label="1" v-model="form.sex">LAKI - LAKI</el-radio>
+							<el-radio :label="0" v-model="form.sex">PEREMPUAN</el-radio>
 
-				<el-form-item
-					label="Nomor Identitas"
-					:class="{ 'is-error': errors.id_number }"
-				>
-					<el-input
-						v-model="form.id_number"
-						placeholder="Nomor Identitas"
-					></el-input>
-					<div class="el-form-item__error" v-if="errors.id_number">
-						{{ errors.id_number.join(', ') }}
-					</div>
-				</el-form-item>
+							<div class="el-form-item__error" v-if="errors.sex">
+								{{ errors.sex.join(', ') }}
+							</div>
+						</el-form-item>
 
-				<el-form-item label="Alamat" :class="{ 'is-error': errors.address }">
-					<el-input
-						type="textarea"
-						rows="3"
-						v-model="form.address"
-						placeholder="Alamat"
-					></el-input>
-					<div class="el-form-item__error" v-if="errors.address">
-						{{ errors.address.join(', ') }}
-					</div>
-				</el-form-item>
+						<el-form-item
+							label="Nomor Identitas"
+							:class="{ 'is-error': errors.id_number }"
+						>
+							<el-input
+								v-model="form.id_number"
+								placeholder="Nomor Identitas"
+							></el-input>
+							<div class="el-form-item__error" v-if="errors.id_number">
+								{{ errors.id_number.join(', ') }}
+							</div>
+						</el-form-item>
 
-				<el-form-item label="Nomor HP" :class="{ 'is-error': errors.phone }">
-					<el-input v-model="form.phone" placeholder="Nomor HP"></el-input>
-					<div class="el-form-item__error" v-if="errors.phone">
-						{{ errors.phone.join(', ') }}
-					</div>
-				</el-form-item>
+						<el-form-item
+							label="Alamat"
+							:class="{ 'is-error': errors.address }"
+						>
+							<el-input
+								type="textarea"
+								rows="3"
+								v-model="form.address"
+								placeholder="Alamat"
+							></el-input>
+							<div class="el-form-item__error" v-if="errors.address">
+								{{ errors.address.join(', ') }}
+							</div>
+						</el-form-item>
 
-				<el-form-item
-					label="Nomor Kartu"
-					:class="{ 'is-error': errors.card_number }"
-				>
-					<el-input
-						v-model="form.card_number"
-						placeholder="Nomor Kartu"
-					></el-input>
-					<div class="el-form-item__error" v-if="errors.card_number">
-						{{ errors.card_number.join(', ') }}
-					</div>
-				</el-form-item>
+						<el-form-item
+							label="Nomor HP"
+							:class="{ 'is-error': errors.phone }"
+						>
+							<el-input v-model="form.phone" placeholder="Nomor HP"></el-input>
+							<div class="el-form-item__error" v-if="errors.phone">
+								{{ errors.phone.join(', ') }}
+							</div>
+						</el-form-item>
+					</el-col>
 
-				<el-form-item
-					label="Plat Nomor"
-					:class="{ 'is-error': errors.plate_number }"
-				>
-					<el-input
-						v-model="form.plate_number"
-						placeholder="Plat Nomor"
-					></el-input>
-					<div class="el-form-item__error" v-if="errors.plate_number">
-						{{ errors.plate_number.join(', ') }}
-					</div>
-				</el-form-item>
+					<el-col :span="12">
+						<el-form-item
+							label="Nomor Kartu"
+							:class="{ 'is-error': errors.card_number }"
+						>
+							<el-input
+								v-model="form.card_number"
+								placeholder="Nomor Kartu"
+							></el-input>
+							<div class="el-form-item__error" v-if="errors.card_number">
+								{{ errors.card_number.join(', ') }}
+							</div>
+						</el-form-item>
 
-				<el-form-item
-					label="Masa Aktif"
-					:class="{ 'is-error': errors.expired_date }"
-				>
-					<el-date-picker
-						style="width: 100%"
-						v-model="form.expired_date"
-						type="date"
-						format="dd-MMM-yyyy"
-						value-format="yyyy-MM-dd"
-						placeholder="Masa Aktif"
-					></el-date-picker>
+						<el-form-item
+							label="Plat Nomor"
+							:class="{ 'is-error': errors.plate_number }"
+						>
+							<el-input
+								v-model="form.plate_number"
+								placeholder="Plat Nomor"
+							></el-input>
+							<div class="el-form-item__error" v-if="errors.plate_number">
+								{{ errors.plate_number.join(', ') }}
+							</div>
+						</el-form-item>
 
-					<div class="el-form-item__error" v-if="errors.expired_date">
-						{{ errors.expired_date.join(', ') }}
-					</div>
-				</el-form-item>
+						<el-form-item
+							label="Masa Aktif"
+							:class="{ 'is-error': errors.expired_date }"
+						>
+							<el-date-picker
+								style="width: 100%"
+								v-model="form.expired_date"
+								type="date"
+								format="dd-MMM-yyyy"
+								value-format="yyyy-MM-dd"
+								placeholder="Masa Aktif"
+							></el-date-picker>
 
-				<el-form-item label="Group" :class="{ 'is-error': errors.group }">
-					<el-select
-						v-model="form.group"
-						placeholder="Group"
-						style="width: 100%"
-					>
-						<el-option :value="0" label="MEMBER"></el-option>
-						<el-option :value="1" label="ADMIN"></el-option>
-					</el-select>
-					<div class="el-form-item__error" v-if="errors.group">
-						{{ errors.group.join(', ') }}
-					</div>
-				</el-form-item>
+							<div class="el-form-item__error" v-if="errors.expired_date">
+								{{ errors.expired_date.join(', ') }}
+							</div>
+						</el-form-item>
 
-				<el-form-item label="Status" :class="{ 'is-error': errors.active }">
-					<el-select
-						v-model="form.active"
-						placeholder="Status"
-						style="width: 100%"
-					>
-						<el-option :value="1" label="AKTIF"></el-option>
-						<el-option :value="0" label="TIDAK AKTIF"></el-option>
-					</el-select>
-					<div class="el-form-item__error" v-if="errors.active">
-						{{ errors.active.join(', ') }}
-					</div>
-				</el-form-item>
+						<el-form-item label="Group" :class="{ 'is-error': errors.group }">
+							<el-select
+								v-model="form.group"
+								placeholder="Group"
+								style="width: 100%"
+							>
+								<el-option :value="0" label="MEMBER"></el-option>
+								<el-option :value="1" label="ADMIN"></el-option>
+							</el-select>
+							<div class="el-form-item__error" v-if="errors.group">
+								{{ errors.group.join(', ') }}
+							</div>
+						</el-form-item>
+
+						<el-form-item label="Status" :class="{ 'is-error': errors.active }">
+							<el-radio :label="1" v-model="form.active">AKTIF</el-radio>
+							<el-radio :label="0" v-model="form.active">TIDAK AKTIF</el-radio>
+							<div class="el-form-item__error" v-if="errors.active">
+								{{ errors.active.join(', ') }}
+							</div>
+						</el-form-item>
+					</el-col>
+				</el-row>
 			</el-form>
 
 			<div slot="footer">
@@ -415,11 +430,16 @@ export default {
 
 				var dataToImport = res.map((r) => {
 					return {
-						name: r[1] || '',
-						phone: r[2] || '',
-						card_number: r[3] || '',
-						plate_number: r[4] || '',
-						expired_date: r[5] || '',
+            name: r[1] || '',
+            sex: r[2] ? (r[2] == 'LAKI - LAKI' ? 1 : 0) : '',
+						id_number: r[3] || '',
+						address: r[4] || '',
+						phone: r[5] || '',
+						group: r[6] ? (r[6] == 'ADMIN' ? 1 : 0) : '',
+						card_number: r[7] || '',
+						plate_number: r[8] || '',
+            expired_date: r[9] || '',
+            active: r[10] ? (r[10] == 'AKTIF' ? 1 : 0) : 0
 					}
 				})
 
