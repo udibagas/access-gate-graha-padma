@@ -61,6 +61,7 @@ export default {
         sortColumn: this.sortColumn,
         sortDirection: this.sortDirection,
         paginated: false,
+        action: 'export',
         ...this.filters
       }
 

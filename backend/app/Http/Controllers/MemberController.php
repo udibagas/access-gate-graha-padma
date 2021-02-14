@@ -23,7 +23,10 @@ class MemberController extends Controller
             $q->where(function ($q) use ($request) {
                 $q->where('name', 'LIKE', "%{$request->keyword}%")
                     ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
-                    ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
+                    ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('address', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('phone', 'LIKE', "%{$request->keyword}%")
+                    ->orWhere('id_number', 'LIKE', "%{$request->keyword}%");
             });
         })->when($request->expired, function ($q) use ($request) {
             if ($request->expired[0] == 'yes') {
@@ -39,7 +42,25 @@ class MemberController extends Controller
             $q->where('active', (int) $request->active[0]);
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
-        return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
+        $data = $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
+
+        if ($request->action == 'export') {
+            return [
+                'filename' => 'Data-Member-' . date('Y-m-d-H-i-s') . '.xls',
+                'data' => $data->map(function ($item, $index) {
+                    return [
+                        'No' => ++$index,
+                        'Nama' => $item->name,
+                        'No HP' => $item->phone,
+                        'Nomor Kartu' => $item->card_number,
+                        'Plat Nomor' => $item->plate_number,
+                        'Masa Berlaku' => $item->expired_date
+                    ];
+                })
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -130,42 +151,5 @@ class MemberController extends Controller
         });
 
         return $response;
-    }
-
-    public function export(Request $request)
-    {
-        $data = Member::when($request->keyword, function ($q) use ($request) {
-            $q->where(function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%{$request->keyword}%")
-                    ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
-                    ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
-            });
-        })->when($request->expired, function ($q) use ($request) {
-            if ($request->expired[0] == 'yes') {
-                $q->whereRaw('DATE(NOW()) > expired_date');
-            }
-
-            if ($request->expired[0] == 'no') {
-                $q->whereRaw('DATE(NOW()) <= expired_date OR expired_date IS NULL');
-            }
-        })->when($request->group, function ($q) use ($request) {
-            $q->where('group', (int) $request->group);
-        })->when($request->active, function ($q) use ($request) {
-            $q->where('active', (int) $request->active);
-        })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc')->get();
-
-        return [
-            'filename' => 'Data-Member-' . date('Y-m-d-H-i-s') . '.xls',
-            'data' => $data->map(function ($item, $index) {
-                return [
-                    'No' => ++$index,
-                    'Nama' => $item->name,
-                    'No HP' => $item->phone,
-                    'Nomor Kartu' => $item->card_number,
-                    'Plat Nomor' => $item->plate_number,
-                    'Masa Berlaku' => $item->expired_date
-                ];
-            })
-        ];
     }
 }

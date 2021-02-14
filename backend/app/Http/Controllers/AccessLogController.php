@@ -43,7 +43,25 @@ class AccessLogController extends Controller
             $q->whereRaw('DATE(created_at) BETWEEN ? AND ? ', $request->dateRange);
         })->orderBy($request->sortColumn ?: 'created_at', $request->sortOrder ?: 'desc');
 
-        return $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
+        $data = $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
+
+        if ($request->action == 'export') {
+            return [
+                'filename' => 'AccessLog_' . date('Y_m_d_H_i_s') . 'xls',
+                'data' => $data->map(function ($item) {
+                    return [
+                        'Waktu' => $item->created_at->format('Y-m-d H:i:s'),
+                        'Gate' => $item->accessGate->name,
+                        'Jenis' => $item->accessGate->type,
+                        'Nama' => $item->member->name,
+                        'Nomor Kartu' => $item->member->card_number,
+                        'Plat Nomor' => $item->member->plate_number,
+                    ];
+                })
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -118,41 +136,5 @@ class AccessLogController extends Controller
         Snapshot::truncate();
         Storage::deleteDirectory('snapshots');
         return ['message' => 'Data telah dihapus'];
-    }
-
-    public function export(Request $request)
-    {
-        $data = AccessLog::when($request->keyword, function ($q) use ($request) {
-            $q->whereHas('member', function ($q) use ($request) {
-                $q->where(function ($q) use ($request) {
-                    $q->where('name', 'LIKE', "%{$request->keyword}%")
-                        ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
-                        ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
-                });
-            });
-        })->when($request->access_gate_id, function ($q) use ($request) {
-            $q->whereIn('access_gate_id', $request->access_gate_id);
-        })->when($request->type, function ($q) use ($request) {
-            $q->whereHas('accessGate', function ($q) use ($request) {
-                $q->whereIn('type', $request->type);
-            });
-        })->when($request->dateRange, function ($q) use ($request) {
-            $q->whereRaw('DATE(created_at) BETWEEN ? AND ? ', $request->dateRange);
-        })->orderBy($request->sortColumn ?: 'created_at', $request->sortOrder ?: 'desc')
-            ->get()->map(function ($item) {
-                return [
-                    'Waktu' => $item->created_at->format('Y-m-d H:i:s'),
-                    'Gate' => $item->accessGate->name,
-                    'Jenis' => $item->accessGate->type,
-                    'Nama' => $item->member->name,
-                    'Nomor Kartu' => $item->member->card_number,
-                    'Plat Nomor' => $item->member->plate_number,
-                ];
-            });
-
-        return [
-            'filename' => 'AccessLog_' . date('Y_m_d_H_i_s') . 'xls',
-            'data' => $data
-        ];
     }
 }

@@ -39,10 +39,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // ACCESS LOG RELATED
     Route::get('accessLogs', [AccessLogController::class, 'index']);
     Route::delete('accessLogs', [AccessLogController::class, 'destroy']);
-    Route::get('accessLogs/export', [AccessLogController::class, 'export']);
+    Route::get('accessLogs/export', [AccessLogController::class, 'index']);
 
     // MEMBER RELATED
-    Route::get('member/export', [MemberController::class, 'export']);
+    Route::get('member/export', [MemberController::class, 'index']);
     Route::post('member/import', [MemberController::class, 'import']);
     Route::delete('member/deleteAll', [MemberController::class, 'deleteAll']);
     Route::resource('member', MemberController::class)->except(['create', 'edit']);
