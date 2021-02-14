@@ -159,14 +159,9 @@
 				]"
 			>
 				<template slot-scope="scope">
-					<el-tag
-						size="mini"
-						:type="scope.row.is_expired ? 'danger' : 'success'"
-						effect="dark"
-						style="width: 100%"
-					>
+					<span :class="scope.row.is_expired ? 'text-danger' : 'text-success'">
 						{{ scope.row.is_expired ? 'YA' : 'TIDAK' }}
-					</el-tag>
+					</span>
 				</template>
 			</el-table-column>
 
@@ -196,7 +191,13 @@
 					{ value: '0', text: 'TIDAK AKTIF' },
 					{ value: '1', text: 'AKTIF' },
 				]"
-			></el-table-column>
+			>
+				<template slot-scope="scope">
+					<span :class="scope.row.active ? 'text-success' : 'text-danger'">{{
+						scope.row.status
+					}}</span>
+				</template>
+			</el-table-column>
 
 			<ActionColumn
 				@refreshData="refreshData"
