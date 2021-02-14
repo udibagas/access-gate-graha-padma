@@ -31,4 +31,19 @@ class MemberRequest extends FormRequest
             'active' => 'boolean'
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'Nama',
+            'card_mumber' => 'Nomor Kartu',
+            'plate_number' => 'Plat Nomor',
+            'group' => 'Group',
+            'active' => 'Status',
+            'address' => 'Alamat',
+            'phone' => 'No. HP',
+            'sex' => 'Jenis Kelamin',
+            'id_number' => 'Nomor Identitas'
+        ];
+    }
 }

@@ -15,11 +15,25 @@ class Member extends Model
     const GROUP_MEMBER = 0;
 
     protected $fillable = [
-        'name', 'phone', 'card_number', 'expired_date',
-        'plate_number', 'group', 'active'
+        'name',
+        'phone',
+        'card_number',
+        'expired_date',
+        'plate_number',
+        'group',
+        'active',
+        'id_number',
+        'address',
+        'sex'
     ];
 
-    protected $appends = ['is_expired', 'readable_expired_date', 'group_name', 'status'];
+    protected $appends = [
+        'is_expired',
+        'readable_expired_date',
+        'group_name',
+        'status',
+        'sex_label'
+    ];
 
     public function accessLogs()
     {
@@ -68,5 +82,10 @@ class Member extends Model
     public function getStatusAttribute()
     {
         return $this->active ? 'AKTIF' : 'TIDAK AKTIF';
+    }
+
+    public function getSexLabelAttribute()
+    {
+        return $this->sex === null ? 'N/A' : ($this->sex ? 'LAKI - LAKI' : 'PEREMPUAN');
     }
 }
