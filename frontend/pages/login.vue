@@ -1,9 +1,13 @@
 <template>
 	<el-card>
-		<h4 class="text-center my-4" style="color: navy">
-			GRAHA PADMA ACCESS GATE
+		<div class="text-center mb-3">
+			<img src="/logo.png" class="img-center" width="120px;" alt="" />
+		</div>
+		<h4 class="text-center my-3" style="color: #2ed1a2">
+			Gate Akses <br />
+			Taman Raflesia Graha Padma
 		</h4>
-		<el-form style="width: 450px" label-position="top" class="p-3">
+		<el-form style="width: 350px" label-position="top" class="p-3">
 			<el-form-item>
 				<el-input
 					prefix-icon="el-icon-user"

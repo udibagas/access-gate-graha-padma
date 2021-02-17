@@ -1,0 +1,10 @@
+Requirement Graha Padma
+1. Di tampilan home, Tampil preview riil time, berupa pop up ( Nama, id kartu, Capture) untuk in dan out
+2. Diberi satu wewenang untuk user, bedanya dengan admin (Tidak bisa edit perangkat ) ==> OK
+3. Ada menu back up database opsi bisa otomatis/manual di local
+4. Ada Group Karyawan dan Warga ==> OK
+5. Warna Biru baik tulisan maupun shading di ganti hijau tosca ==> PARTIAL OK
+6. Ada logo graha padma sebelum judul, dan ganti judul " Gate Akses taman Raflesia Graha Padma". ==> OK
+7. Tulisan di dalam menu member " Masa aktif diganti Aktif Sampai Dengan". ==> OK
+8. Ada menu laporan transaksi untuk simpan data range tanggal, satu baris id ada file capturenya in dan out
+9. Ada menu laporan member bisa filter aktif maupun non aktif

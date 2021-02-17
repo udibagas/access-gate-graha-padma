@@ -5,6 +5,7 @@
 			<el-form inline @submit.native.prevent>
 				<el-form-item class="mb-0">
 					<el-button
+						v-if="$auth.user.role == 1"
 						size="small"
 						type="danger"
 						icon="el-icon-delete"
@@ -17,7 +18,6 @@
 					<el-button
 						icon="el-icon-refresh"
 						type="primary"
-						plain
 						size="small"
 						@click="refresh"
 					></el-button>

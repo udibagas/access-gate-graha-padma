@@ -11,6 +11,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    const ROLE_USER = 0;
+
+    const ROLE_ADMIN = 1;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -31,6 +36,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected $appends = ['role_name'];
 
     /**
      * The attributes that should be cast to native types.
@@ -44,5 +51,10 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function getRoleNameAttribute()
+    {
+        return $this->role == 0 ? 'USER' : 'ADMIN';
     }
 }

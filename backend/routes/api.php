@@ -28,25 +28,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
 
-    // TEST RELATED
-    Route::get('camera/test/{camera}', [CameraController::class, 'test']);
-
     // MASTER DATA
-    Route::resource('user', UserController::class)->except(['create', 'edit']);
-    Route::resource('accessGate', AccessGateController::class)->except(['create', 'edit']);
-    Route::resource('camera', CameraController::class)->except(['create', 'edit']);
+    Route::middleware('admin')->group(function () {
+        Route::get('camera/test/{camera}', [CameraController::class, 'test']);
+        Route::apiResources([
+            'user' => UserController::class,
+            'accessGate' => AccessGateController::class,
+            'camera' => CameraController::class
+        ]);
+        Route::delete('accessLogs', [AccessLogController::class, 'destroy']);
+        Route::delete('member/deleteAll', [MemberController::class, 'deleteAll']);
+        Route::post('snapshot/delete', [SnapshotController::class, 'destroy']);
+    });
 
     // ACCESS LOG RELATED
     Route::get('accessLogs', [AccessLogController::class, 'index']);
-    Route::delete('accessLogs', [AccessLogController::class, 'destroy']);
     Route::get('accessLogs/export', [AccessLogController::class, 'index']);
 
     // MEMBER RELATED
     Route::get('member/export', [MemberController::class, 'index']);
     Route::post('member/import', [MemberController::class, 'import']);
-    Route::delete('member/deleteAll', [MemberController::class, 'deleteAll']);
-    Route::resource('member', MemberController::class)->except(['create', 'edit']);
+    Route::apiResource('member', MemberController::class);
 
-    Route::post('snapshot/delete', [SnapshotController::class, 'destroy']);
     Route::get('snapshot', [SnapshotController::class, 'index']);
 });

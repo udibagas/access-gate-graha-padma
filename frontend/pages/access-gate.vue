@@ -158,6 +158,7 @@ import crud from '../mixins/crud';
 import dropdown from '../mixins/dropdown';
 
 export default {
+  middleware: 'admin',
   mixins: [crud, dropdown],
 
   created() {

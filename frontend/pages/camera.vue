@@ -162,6 +162,7 @@
 import crud from '../mixins/crud';
 
 export default {
+  middleware: 'admin',
   mixins: [crud],
   data() {
     return {

@@ -76,7 +76,7 @@ class Member extends Model
 
     public function getGroupNameAttribute()
     {
-        return $this->group == self::GROUP_ADMIN ? 'ADMIN' : 'MEMBER';
+        return $this->group == self::GROUP_ADMIN ? 'KARYAWAN' : 'WARGA';
     }
 
     public function getStatusAttribute()

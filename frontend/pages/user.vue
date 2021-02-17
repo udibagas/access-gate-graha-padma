@@ -46,6 +46,7 @@
 			></el-table-column>
 			<el-table-column prop="name" label="Name"></el-table-column>
 			<el-table-column prop="email" label="Email"></el-table-column>
+			<el-table-column prop="role_name" label="Role"></el-table-column>
 
 			<ActionColumn
 				@refreshData="refreshData"
@@ -71,7 +72,7 @@
 			:before-close="closeForm"
 			:close-on-click-modal="false"
 		>
-			<el-form label-width="180px" label-position="left">
+			<el-form label-width="185px" label-position="left">
 				<el-form-item label="Nama" :class="{ 'is-error': errors.name }">
 					<el-input v-model="form.name" placeholder="Nama"></el-input>
 					<div class="el-form-item__error" v-if="errors.name">
@@ -83,6 +84,16 @@
 					<el-input v-model="form.email" placeholder="Email"></el-input>
 					<div class="el-form-item__error" v-if="errors.email">
 						{{ errors.email.join(', ') }}
+					</div>
+				</el-form-item>
+
+				<el-form-item label="Role" :class="{ 'is-error': errors.role }">
+					<el-select v-model="form.role" placeholder="Role" style="width: 100%">
+						<el-option :value="0" label="USER"></el-option>
+						<el-option :value="1" label="ADMIN"></el-option>
+					</el-select>
+					<div class="el-form-item__error" v-if="errors.role">
+						{{ errors.role.join(', ') }}
 					</div>
 				</el-form-item>
 
@@ -136,6 +147,7 @@
 import crud from '../mixins/crud';
 
 export default {
+  middleware: 'admin',
   mixins: [crud],
   data() {
     return {

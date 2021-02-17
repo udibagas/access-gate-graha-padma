@@ -1,23 +1,25 @@
 <template>
 	<el-container>
 		<el-header>
-			<div class="title">GRAHA PADMA ACCESS GATE</div>
-			<div style="display: flex">
+			<img src="/logo.png" style="height: 60px; margin-right: 20px" alt="" />
+			<div class="title flex-grow-1">Gate Akses Taman Raflesia Graha Padma</div>
+			<div class="d-flex">
 				<el-menu
 					mode="horizontal"
 					router
 					background-color="transparent"
 					text-color="white"
-					active-text-color="red"
+					active-text-color="#d70082"
 					:default-active="$route.path"
 				>
-					<el-menu-item index="/">Home</el-menu-item>
-					<el-menu-item index="/member">Member</el-menu-item>
-					<el-menu-item index="/access-gate">Access Gate</el-menu-item>
-					<el-menu-item index="/camera">Camera</el-menu-item>
-					<el-menu-item index="/snapshot">Snapshot</el-menu-item>
-					<!-- <el-menu-item index="/user">User</el-menu-item> -->
-					<!-- <el-menu-item index="/setting">Setting</el-menu-item> -->
+					<el-menu-item
+						v-for="(menu, index) in menus.filter((m) =>
+							m.roles.includes($auth.user.role)
+						)"
+						:key="index"
+						:index="menu.link"
+						>{{ menu.label }}</el-menu-item
+					>
 				</el-menu>
 				<el-dropdown>
 					<span class="el-dropdown-link">
@@ -56,7 +58,17 @@ export default {
 
   data() {
     return {
-      showProfileDialog: false
+      showProfileDialog: false,
+      menus: [
+        {label: 'Home', link: '/', roles: [0, 1]},
+        // {label: 'Log', link: '/access-log', roles: [0, 1]},
+        {label: 'Member', link: '/member', roles: [0, 1]},
+        {label: 'Snapshot', link: '/snapshot', roles: [0, 1]},
+        {label: 'Gate', link: '/access-gate', roles: [1]},
+        {label: 'Camera', link: '/camera', roles: [1]},
+        {label: 'User', link: '/user', roles: [1]},
+        // {label: 'Setting', link: '/setting', roles: [1]},
+      ]
     }
   },
 
@@ -80,11 +92,12 @@ body {
 }
 
 .el-header {
+	padding-left: 0;
 	line-height: 60px;
 	display: flex;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 	border-bottom: 1px solid #ddd;
-	background: navy;
+	background: #22a07c;
 }
 
 .el-main {

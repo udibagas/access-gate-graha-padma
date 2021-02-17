@@ -8,23 +8,28 @@
 }
 
 .el-button--primary {
-  border-color: navy;
-	background: navy;
+  border-color: #2ED1A2;
+	background: #2ED1A2;
+}
+
+.el-button--primary:hover, .el-button--primary:focus {
+  background-color: #22a07c;
+  border-color: #22a07c;
 }
 
 .el-button--primary.is-plain {
-	color: navy;
-	border-color: navy;
+	color: #2ED1A2;
+	border-color: #2ED1A2;
 	background: none;
 }
 
-.el-button--primary.is-plain:hover {
-	background: navy;
+.el-button--primary.is-plain:hover, .el-pagination.is-background .el-pager li:not(.disabled).active {
+	background: #2ED1A2;
 	color: white;
 }
 
-.bg-navy {
-  background: navy;
+.bg-tosca {
+  background: #2ED1A2;
 }
 
 .el-card__header {
@@ -33,4 +38,14 @@
 
 .el-card__header {
   padding: 5px 10px;
+}
+
+.el-button--default:hover {
+  border-color: #22a07c;
+  background-color: #eefffa;
+  color: #22a07c;
+}
+
+.el-input:hover {
+  border-color: #22a07c;
 }

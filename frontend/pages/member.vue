@@ -32,6 +32,7 @@
 								>Download Data Member</el-dropdown-item
 							>
 							<el-dropdown-item
+								v-if="$auth.user.role == 1"
 								@click.native.prevent="deleteAll"
 								icon="el-icon-delete"
 								>Hapus Semua Data Member</el-dropdown-item
@@ -140,10 +141,10 @@
 
 			<el-table-column
 				prop="readable_expired_date"
-				label="Masa Berlaku"
+				label="Aktif Sampai Dengan"
 				align="center"
 				header-align="center"
-				width="150"
+				width="185"
 			></el-table-column>
 
 			<el-table-column
@@ -222,7 +223,7 @@
 			:close-on-click-modal="false"
 			width="950px"
 		>
-			<el-form label-width="170px" label-position="left">
+			<el-form label-width="185px" label-position="left">
 				<el-row :gutter="30">
 					<el-col :span="12">
 						<el-form-item label="Nama" :class="{ 'is-error': errors.name }">
@@ -311,7 +312,7 @@
 						</el-form-item>
 
 						<el-form-item
-							label="Masa Aktif"
+							label="Aktif Sampai Dengan"
 							:class="{ 'is-error': errors.expired_date }"
 						>
 							<el-date-picker
@@ -334,8 +335,8 @@
 								placeholder="Group"
 								style="width: 100%"
 							>
-								<el-option :value="0" label="MEMBER"></el-option>
-								<el-option :value="1" label="ADMIN"></el-option>
+								<el-option :value="0" label="WARGA"></el-option>
+								<el-option :value="1" label="KARYAWAN"></el-option>
 							</el-select>
 							<div class="el-form-item__error" v-if="errors.group">
 								{{ errors.group.join(', ') }}
@@ -436,7 +437,7 @@ export default {
 						id_number: r[3] || '',
 						address: r[4] || '',
 						phone: r[5] || '',
-						group: r[6] ? (r[6] == 'ADMIN' ? 1 : 0) : '',
+						group: r[6] ? (r[6] == 'KARYAWAN' ? 1 : 0) : '',
 						card_number: r[7] || '',
 						plate_number: r[8] || '',
             expired_date: r[9] || '',
