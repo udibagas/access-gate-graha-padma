@@ -182,6 +182,7 @@
 </template>
 
 <script>
+
 import crud from '../mixins/crud';
 
 export default {
@@ -245,6 +246,16 @@ export default {
         return { value: g.id, text: g.name }
       });
     })
+  },
+
+  mounted() {
+    Echo.channel('member')
+      .listen(".tap", (e) => {
+		this.showSnapshot(e.accessLog);
+		setTimeout(() => {
+			this.snapshotDialog = false
+		}, 5000)
+      });
   }
 }
 </script>
