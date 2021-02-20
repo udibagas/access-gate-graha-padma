@@ -5,6 +5,17 @@
 			<el-form inline @submit.native.prevent>
 				<el-form-item class="mb-0">
 					<el-button
+						:disabled="selectedFiles.length == 0"
+						@click="deleteFiles"
+						type="danger"
+						icon="el-icon-delete"
+						size="small"
+						title="Hapus File Backup"
+						>HAPUS FILE BACKUP</el-button
+					>
+				</el-form-item>
+				<el-form-item class="mb-0">
+					<el-button
 						@click="triggerOpenFile"
 						type="primary"
 						icon="el-icon-upload2"
@@ -39,7 +50,14 @@
 			v-loading="loading"
 			stripe
 			height="calc(100vh - 115px)"
+			@selection-change="handleSelectionChange"
 		>
+			<el-table-column
+				type="selection"
+				width="55"
+				align="center"
+				header-align="center"
+			></el-table-column>
 			<el-table-column type="index" label="#"></el-table-column>
 			<el-table-column
 				prop="tanggal"
@@ -98,7 +116,8 @@ export default {
     return {
       tableData: [],
       loading: false,
-      processing: false
+      processing: false,
+      selectedFiles: []
     }
   },
 
@@ -204,6 +223,14 @@ export default {
         this.loading = false;
         document.getElementById('input-file').value = '';
       });
+    },
+
+    handleSelectionChange(val) {
+      this.selectedFiles = val.map(v => v.file)
+    },
+
+    deleteFiles() {
+      this.deleteData(this.selectedFiles)
     },
 
     download(url) {
