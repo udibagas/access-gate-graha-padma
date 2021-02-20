@@ -21,6 +21,7 @@
 								>Print Log</el-dropdown-item
 							> -->
 							<el-dropdown-item
+								v-if="$auth.user.role == 1"
 								@click.native.prevent="deleteLog"
 								icon="el-icon-delete"
 							>
