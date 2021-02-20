@@ -20,7 +20,6 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        MemberTapEvent::class => [MemberTapListener::class]
     ];
 
     /**

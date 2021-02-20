@@ -103,16 +103,8 @@
 			></el-table-column>
 
 			<el-table-column prop="member.name" label="Nama"></el-table-column>
-
-			<el-table-column
-				prop="member.card_number"
-				label="Nomor Kartu"
-			></el-table-column>
-
-			<el-table-column
-				prop="member.plate_number"
-				label="Plat Nomor"
-			></el-table-column>
+			<el-table-column prop="card_number" label="Nomor Kartu"></el-table-column>
+			<el-table-column prop="plate_number" label="Plat Nomor"></el-table-column>
 
 			<el-table-column align="center" header-align="center" width="80">
 				<template slot="header">
@@ -155,10 +147,10 @@
 		>
 			<div class="bg-secondary p-3 mb-3 text-white">
 				<span class="label">Nama</span> : {{ selectedData.member.name }} <br />
-				<span class="label">Nomor Kartu</span> :
-				{{ selectedData.member.card_number }} <br />
-				<span class="label">Plat Nomor</span> :
-				{{ selectedData.member.plate_number }} <br />
+				<span class="label">Nomor Kartu</span> : {{ selectedData.card_number }}
+				<br />
+				<span class="label">Plat Nomor</span> : {{ selectedData.plate_number }}
+				<br />
 				<span class="label">Gate</span> :
 				{{ selectedData.access_gate.name }} ({{
 					selectedData.access_gate.type
@@ -251,11 +243,17 @@ export default {
   mounted() {
     Echo.channel('member')
       .listen(".tap", (e) => {
+		this.refreshData();
 		this.showSnapshot(e.accessLog);
+
 		setTimeout(() => {
 			this.snapshotDialog = false
 		}, 5000)
       });
+  },
+
+  destroyed() {
+	Echo.leave('member');
   }
 }
 </script>

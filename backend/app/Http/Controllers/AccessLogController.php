@@ -32,7 +32,8 @@ class AccessLogController extends Controller
                         ->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
                 });
-            });
+            })->orWhere('card_number', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('plate_number', 'LIKE', "%{$request->keyword}%");
         })->when($request->access_gate_id, function ($q) use ($request) {
             $q->whereIn('access_gate_id', $request->access_gate_id);
         })->when($request->type, function ($q) use ($request) {
@@ -47,15 +48,15 @@ class AccessLogController extends Controller
 
         if ($request->action == 'export') {
             return [
-                'filename' => 'AccessLog_' . date('Y_m_d_H_i_s') . 'xls',
+                'filename' => 'AccessLog_' . date('Y_m_d_H_i_s') . '.xls',
                 'data' => $data->map(function ($item) {
                     return [
                         'Waktu' => $item->created_at->format('Y-m-d H:i:s'),
                         'Gate' => $item->accessGate->name,
                         'Jenis' => $item->accessGate->type,
                         'Nama' => $item->member->name,
-                        'Nomor Kartu' => $item->member->card_number,
-                        'Plat Nomor' => $item->member->plate_number,
+                        'Nomor Kartu' => $item->card_number,
+                        'Plat Nomor' => $item->plate_number,
                     ];
                 })
             ];
@@ -106,7 +107,9 @@ class AccessLogController extends Controller
 
         $accessLog = AccessLog::create([
             'member_id' => $member->id,
-            'access_gate_id' => $gate->id
+            'access_gate_id' => $gate->id,
+            'card_number' => $request->card_number,
+            'plate_number' => $member->plate_number
         ]);
 
         TakeSnapshot::dispatch($accessLog);

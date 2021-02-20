@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\MemberTapEvent;
 use App\Models\AccessGate;
 use App\Models\AccessLog;
 use App\Notifications\CameraErrorNotification;
@@ -63,5 +64,8 @@ class TakeSnapshot implements ShouldQueue
                 'filename' => $fileName,
             ]);
         }
+
+        $this->accessLog->refresh();
+        event(new MemberTapEvent($this->accessLog));
     }
 }

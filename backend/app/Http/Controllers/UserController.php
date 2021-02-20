@@ -66,6 +66,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if ($user->id == auth()->user()->id) {
+            return response(['message' => 'Tidak boleh menghapus akun sendiri.'], 500);
+        }
+
         $user->delete();
         return ['message' => 'Data telah dihapus'];
     }

@@ -10,7 +10,12 @@ class AccessLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['member_id', 'access_gate_id'];
+    protected $fillable = [
+        'member_id',
+        'access_gate_id',
+        'card_number',
+        'plate_number'
+    ];
 
     protected $with = ['member', 'accessGate', 'snapshots'];
 
