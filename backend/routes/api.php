@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccessGateController;
 use App\Http\Controllers\AccessLogController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SnapshotController;
@@ -31,14 +32,23 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // MASTER DATA
     Route::middleware('admin')->group(function () {
         Route::get('camera/test/{camera}', [CameraController::class, 'test']);
+
         Route::apiResources([
             'user' => UserController::class,
             'accessGate' => AccessGateController::class,
             'camera' => CameraController::class
         ]);
+
         Route::delete('accessLogs', [AccessLogController::class, 'destroy']);
         Route::delete('member/deleteAll', [MemberController::class, 'deleteAll']);
         Route::post('snapshot/delete', [SnapshotController::class, 'destroy']);
+
+        Route::prefix('backup')->group(function () {
+            Route::get('', [BackupController::class, 'index']);
+            Route::post('', [BackupController::class, 'store']);
+            Route::delete('', [BackupController::class, 'destroy']);
+            Route::put('', [BackupController::class, 'restore']);
+        });
     });
 
     // ACCESS LOG RELATED

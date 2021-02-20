@@ -67,6 +67,7 @@ export default {
         {label: 'Gate', link: '/access-gate', roles: [1]},
         {label: 'Camera', link: '/camera', roles: [1]},
         {label: 'User', link: '/user', roles: [1]},
+        {label: 'Backup', link: '/backup', roles: [1]},
         // {label: 'Setting', link: '/setting', roles: [1]},
       ]
     }
