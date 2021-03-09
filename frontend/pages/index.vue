@@ -175,87 +175,92 @@
 </template>
 
 <script>
-
-import crud from '../mixins/crud';
+import crud from '../mixins/crud'
 
 export default {
-  mixins: [crud],
-  data() {
-    return {
-      url: '/api/accessLogs',
-      paginated: true,
-      filterGate: [],
-      selectedData: {
-        // id: 1,
-        // time: '12-Jan-2021 19:00:12',
-        // member: {
-        //   name: 'Bagas',
-        //   card_number: '123',
-        //   plate_number: 'sss'
-        // },
-        // access_gate: {
-        //   name: 'GATE 1',
-        //   type: 'IN'
-        // },
-        // snapshots: [
-        //   {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 1, camera: {name: 'KAMERA A'}, time: '12-Jan-2021 19:00:12'},
-        //   {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 2, camera: {name: 'KAMERA B'}, time: '12-Jan-2021 19:00:12'},
-        // ]
-      },
-      snapshotDialog: false
-    }
-  },
+	mixins: [crud],
+	data() {
+		return {
+			url: '/api/accessLogs',
+			paginated: true,
+			filterGate: [],
+			selectedData: {
+				// id: 1,
+				// time: '12-Jan-2021 19:00:12',
+				// member: {
+				//   name: 'Bagas',
+				//   card_number: '123',
+				//   plate_number: 'sss'
+				// },
+				// access_gate: {
+				//   name: 'GATE 1',
+				//   type: 'IN'
+				// },
+				// snapshots: [
+				//   {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 1, camera: {name: 'KAMERA A'}, time: '12-Jan-2021 19:00:12'},
+				//   {url: 'https://via.placeholder.com/1280x720.png?text=SNAPSHOT', id: 2, camera: {name: 'KAMERA B'}, time: '12-Jan-2021 19:00:12'},
+				// ]
+			},
+			snapshotDialog: false,
+		}
+	},
 
-  methods: {
-    showSnapshot(data) {
-      this.snapshotDialog = true;
-      this.selectedData = data;
-    },
+	methods: {
+		showSnapshot(data) {
+			this.snapshotDialog = true
+			this.selectedData = data
+		},
 
-    deleteLog() {
-      this.$confirm('Anda yakin akan menghapus semua log?', 'Konfirmasi', { type: 'warning' }).then(() => {
-        this.$axios.$delete('/api/accessLogs').then(r => {
-          this.$message({
-            message: r.message,
-            type: 'success',
-            showClose: true
-          });
-          this.fetchData();
-        }).catch(e => {
-          this.$message({
-            message: e.response.data.message,
-            type: 'error',
-            showClose: true
-          })
-        });
-      }).catch(e => console.log(e));
-    }
-  },
+		deleteLog() {
+			this.$confirm('Anda yakin akan menghapus semua log?', 'Konfirmasi', {
+				type: 'warning',
+			})
+				.then(() => {
+					this.$axios
+						.$delete('/api/accessLogs')
+						.then((r) => {
+							this.$message({
+								message: r.message,
+								type: 'success',
+								showClose: true,
+							})
+							this.fetchData()
+						})
+						.catch((e) => {
+							this.$message({
+								message: e.response.data.message,
+								type: 'error',
+								showClose: true,
+							})
+						})
+				})
+				.catch((e) => console.log(e))
+		},
+	},
 
-  created() {
-    const params = { paginated: false };
-    this.$axios.$get('/api/accessGate', { params }).then(r => {
-      this.filterGate = r.map(g => {
-        return { value: g.id, text: g.name }
-      });
-    })
-  },
+	created() {
+		const params = { paginated: false }
+		this.$axios.$get('/api/accessGate', { params }).then((r) => {
+			this.filterGate = r.map((g) => {
+				return { value: g.id, text: g.name }
+			})
+		})
+	},
 
-  mounted() {
-    Echo.channel('member')
-      .listen(".tap", (e) => {
-		this.refreshData();
-		this.showSnapshot(e.accessLog);
+	mounted() {
+		Echo.channel('member').listen('.tap', (e) => {
+			this.refreshData()
+			// this.showSnapshot(e.accessLog)
 
-		setTimeout(() => {
-			this.snapshotDialog = false
-		}, 5000)
-      });
-  },
+			setTimeout(() => {
+				this.snapshotDialog = false
+			}, 5000)
+		})
+	},
 
-  destroyed() {
-	Echo.leave('member');
-  }
+	destroyed() {
+		Echo.leave('member')
+	},
 }
 </script>
 
