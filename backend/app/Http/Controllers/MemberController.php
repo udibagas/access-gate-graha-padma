@@ -121,7 +121,7 @@ class MemberController extends Controller
                 return $i->path;
             }));
 
-            $member->accessLogs->delete();
+            $member->accessLogs()->delete();
         }
 
         return ['message' => 'Data telah dihapus'];
