@@ -373,47 +373,57 @@
 </template>
 
 <script>
-import crud from '../mixins/crud';
-import XLSX from 'xlsx';
+import crud from '../mixins/crud'
+import XLSX from 'xlsx'
 
 export default {
-  mixins: [crud],
+	mixins: [crud],
 
-  data() {
-    return {
-      url: '/api/member',
-      paginated: true
-    }
-  },
+	data() {
+		return {
+			url: '/api/member',
+			paginated: true,
+		}
+	},
 
-  methods: {
-    triggerOpenFile() {
-      const f = document.getElementById('input-file');
-      f.click();
-    },
+	methods: {
+		triggerOpenFile() {
+			const f = document.getElementById('input-file')
+			f.click()
+		},
 
-    deleteAll() {
-      this.$confirm('Anda yakin akan menghaus semua data member?', 'Konfirmasi', { type: 'warning' }).then(() => {
-        this.loading = true;
-        this.$axios.$delete(`${this.url}/deleteAll`).then(r => {
-          this.$message({
-            message: r.message,
-            type: 'success',
-            showClose: true
-          });
-          this.refreshData();
-        }).catch(e => {
-          this.$message({
-            message: e.response.data.message,
-            type: 'error',
-            showClose: true
-          });
-        }).finally(() => this.loading = false)
-      }).catch(e => console.log(e));
-    },
+		deleteAll() {
+			this.$confirm(
+				'Anda yakin akan menghaus semua data member?',
+				'Konfirmasi',
+				{ type: 'warning' }
+			)
+				.then(() => {
+					this.loading = true
+					this.$axios
+						.$delete(`${this.url}/deleteAll`)
+						.then((r) => {
+							this.$message({
+								message: r.message,
+								type: 'success',
+								showClose: true,
+							})
+							this.refreshData()
+						})
+						.catch((e) => {
+							this.$message({
+								message: e.response.data.message,
+								type: 'error',
+								showClose: true,
+							})
+						})
+						.finally(() => (this.loading = false))
+				})
+				.catch((e) => console.log(e))
+		},
 
-    readFile(oEvent) {
-      this.loading = true
+		readFile(oEvent) {
+			this.loading = true
 			var oFile = oEvent.target.files[0]
 			var reader = new FileReader()
 
@@ -432,16 +442,16 @@ export default {
 
 				var dataToImport = res.map((r) => {
 					return {
-            name: r[1] || '',
-            sex: r[2] ? (r[2] == 'LAKI - LAKI' ? 1 : 0) : '',
+						name: r[1] || '',
+						sex: r[2] ? (r[2] == 'LAKI - LAKI' ? 1 : 0) : '',
 						id_number: r[3] || '',
 						address: r[4] || '',
 						phone: r[5] || '',
 						group: r[6] ? (r[6] == 'KARYAWAN' ? 1 : 0) : '',
-						card_number: r[7] || '',
+						card_number: r[7] ? r[7].replace("'", '') : '',
 						plate_number: r[8] || '',
-            expired_date: r[9] || '',
-            active: r[10] ? (r[10] == 'AKTIF' ? 1 : 0) : 0
+						expired_date: r[9] || '',
+						active: r[10] ? (r[10] == 'AKTIF' ? 1 : 0) : 0,
 					}
 				})
 
@@ -450,33 +460,33 @@ export default {
 			}
 
 			reader.readAsArrayBuffer(oFile)
-    },
+		},
 
-    importData(dataToImport) {
-			this.loading = true;
+		importData(dataToImport) {
+			this.loading = true
 			this.$axios
-				.$post("/api/member/import", { rows: dataToImport })
+				.$post('/api/member/import', { rows: dataToImport })
 				.then((r) => {
 					this.$message({
 						message: r.message,
-            type: "success",
-            showClose: true
-					});
-					this.pagination.current_page = 1;
-					this.fetchData();
+						type: 'success',
+						showClose: true,
+					})
+					this.pagination.current_page = 1
+					this.fetchData()
 				})
 				.catch((e) => {
 					this.$message({
 						message: e.response.data.message,
-						type: "error",
+						type: 'error',
 						showClose: true,
-					});
+					})
 				})
 				.finally(() => {
-					this.loading = false;
-					document.getElementById("input-file").value = "";
-				});
+					this.loading = false
+					document.getElementById('input-file').value = ''
+				})
 		},
-  }
+	},
 }
 </script>

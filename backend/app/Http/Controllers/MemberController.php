@@ -48,7 +48,7 @@ class MemberController extends Controller
 
         if ($request->action == 'export') {
             return [
-                'filename' => 'Data-Member-' . date('Y-m-d-H-i-s') . '.xls',
+                'filename' => 'Data-Member-' . date('Y-m-d-H-i-s'),
                 'data' => $data->map(function ($item, $index) {
                     return [
                         'No' => ++$index,
@@ -58,7 +58,7 @@ class MemberController extends Controller
                         'Alamat' => $item->address,
                         'No HP' => $item->phone,
                         'Group' => $item->group_name,
-                        'Nomor Kartu' => $item->card_number,
+                        'Nomor Kartu' => "'{$item->card_number}",
                         'Plat Nomor' => $item->plate_number,
                         'Masa Berlaku' => $item->expired_date,
                         'Status' => $item->status
