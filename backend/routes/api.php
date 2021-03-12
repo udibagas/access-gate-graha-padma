@@ -61,4 +61,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('member', MemberController::class);
 
     Route::get('snapshot', [SnapshotController::class, 'index']);
+    Route::get('snapshot/download', [SnapshotController::class, 'download']);
 });

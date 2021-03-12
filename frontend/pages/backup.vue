@@ -93,6 +93,7 @@
 								>Download</el-dropdown-item
 							>
 							<el-dropdown-item
+								v-if="scope.row.file.includes('.sql')"
 								icon="el-icon-refresh"
 								@click.native.prevent="restore(scope.row.file)"
 								>Restore</el-dropdown-item
@@ -112,130 +113,159 @@
 
 <script>
 export default {
-  data() {
-    return {
-      tableData: [],
-      loading: false,
-      processing: false,
-      selectedFiles: []
-    }
-  },
+	data() {
+		return {
+			tableData: [],
+			loading: false,
+			processing: false,
+			selectedFiles: [],
+		}
+	},
 
-  mounted() {
-    this.getData();
-  },
+	mounted() {
+		this.getData()
+	},
 
-  methods: {
-    getData() {
-      this.loading = true;
-      this.$axios.$get('/api/backup').then(response => {
-        this.tableData = response;
-      }).catch(e => {
-        this.$message({
-          message: e.response.data.message,
-          type: 'error',
-          showClose: true
-        });
-      }).finally(() => this.loading = false)
-    },
+	methods: {
+		getData() {
+			this.loading = true
+			this.$axios
+				.$get('/api/backup')
+				.then((response) => {
+					this.tableData = response
+				})
+				.catch((e) => {
+					this.$message({
+						message: e.response.data.message,
+						type: 'error',
+						showClose: true,
+					})
+				})
+				.finally(() => (this.loading = false))
+		},
 
-    deleteData(file) {
-      this.$confirm('Anda yakin akan menghapus file ini?', 'Konfirmasi' ,{ type: 'warning' }).then(() => {
-        const params = { file };
-        this.$axios.$delete('/api/backup', { params }).then(response => {
-          this.$message({
-            message: response.message,
-            type: 'success',
-            showClose: true
-          });
-          this.getData();
-        }).catch(e => {
-          this.$message({
-            message: e.response.data.message,
-            type: 'error',
-            showClose: true
-          });
-        });
-      }).catch((e) => console.log(e));
-    },
+		deleteData(file) {
+			this.$confirm('Anda yakin akan menghapus file ini?', 'Konfirmasi', {
+				type: 'warning',
+			})
+				.then(() => {
+					const params = { file }
+					this.$axios
+						.$delete('/api/backup', { params })
+						.then((response) => {
+							this.$message({
+								message: response.message,
+								type: 'success',
+								showClose: true,
+							})
+							this.getData()
+						})
+						.catch((e) => {
+							this.$message({
+								message: e.response.data.message,
+								type: 'error',
+								showClose: true,
+							})
+						})
+				})
+				.catch((e) => console.log(e))
+		},
 
-    backup() {
-      this.processing = true;
-      this.$axios.$post('/api/backup').then(response => {
-        this.$message({
-          message: response.message,
-          type: 'success',
-          showClose: true
-        });
-        this.getData();
-      }).catch(e => {
-        this.$message({
-          message: e.response.data.message,
-          type: 'error',
-          showClose: true
-        });
-      }).finally(() => this.processing = false)
-    },
+		backup() {
+			this.processing = true
+			this.$axios
+				.$post('/api/backup')
+				.then((response) => {
+					this.$message({
+						message: response.message,
+						type: 'success',
+						showClose: true,
+					})
+					this.getData()
+				})
+				.catch((e) => {
+					this.$message({
+						message: e.response.data.message,
+						type: 'error',
+						showClose: true,
+					})
+				})
+				.finally(() => (this.processing = false))
+		},
 
-    restore(file) {
-      this.$confirm('Anda yakin akan me-restore database?', 'Konfirmasi' ,{ type: 'warning' }).then(() => {
-        this.loading = true;
-        this.$axios.$put('/api/backup', { file }).then(response => {
-          this.$message({
-            message: response.message,
-            type: 'success',
-            showClose: true
-          });
-          this.getData();
-        }).catch(e => {
-          this.$message({
-            message: e.response.data.message,
-            type: 'error',
-            showClose: true
-          });
-        }).finally(() => this.loading = false)
-      }).catch((e) => console.log(e));
-    },
+		restore(file) {
+			this.$confirm('Anda yakin akan me-restore database?', 'Konfirmasi', {
+				type: 'warning',
+			})
+				.then(() => {
+					this.loading = true
+					this.$axios
+						.$put('/api/backup', { file })
+						.then((response) => {
+							this.$message({
+								message: response.message,
+								type: 'success',
+								showClose: true,
+							})
+							this.getData()
+						})
+						.catch((e) => {
+							this.$message({
+								message: e.response.data.message,
+								type: 'error',
+								showClose: true,
+							})
+						})
+						.finally(() => (this.loading = false))
+				})
+				.catch((e) => console.log(e))
+		},
 
-    triggerOpenFile() {
-      const f = document.getElementById('input-file');
-      f.click();
-    },
+		triggerOpenFile() {
+			const f = document.getElementById('input-file')
+			f.click()
+		},
 
-    uploadFile(event) {
-      var formData = new FormData();
-      formData.append('file', event.target.files[0]);
+		uploadFile(event) {
+			var formData = new FormData()
+			formData.append('file', event.target.files[0])
 
-      this.$axios.$post('api/backup', formData, { headers: { "Content-Type": "multipart/form-data" } }).then(response => {
-        this.$message({
-          message: response.message,
-          type: 'success',
-          showClose: true
-        });
-        this.getData();
-      }).catch(e => {
-        this.$message({
-          message: e.response.data.message,
-          type: 'error',
-          showClose: true
-        });
-      }).finally(() => {
-        this.loading = false;
-        document.getElementById('input-file').value = '';
-      });
-    },
+			this.$axios
+				.$post('api/backup', formData, {
+					headers: { 'Content-Type': 'multipart/form-data' },
+				})
+				.then((response) => {
+					this.$message({
+						message: response.message,
+						type: 'success',
+						showClose: true,
+					})
+					this.getData()
+				})
+				.catch((e) => {
+					this.$message({
+						message: e.response.data.message,
+						type: 'error',
+						showClose: true,
+					})
+				})
+				.finally(() => {
+					this.loading = false
+					document.getElementById('input-file').value = ''
+				})
+		},
 
-    handleSelectionChange(val) {
-      this.selectedFiles = val.map(v => v.file)
-    },
+		handleSelectionChange(val) {
+			this.selectedFiles = val.map((v) => v.file)
+		},
 
-    deleteFiles() {
-      this.deleteData(this.selectedFiles)
-    },
+		deleteFiles() {
+			this.deleteData(this.selectedFiles)
+		},
 
-    download(url) {
-      window.open(url, '_blank');
-    }
-  }
+		download(url) {
+			window.open(url, '_blank')
+		},
+	},
 }
 </script>
