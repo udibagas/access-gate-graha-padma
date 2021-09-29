@@ -13,7 +13,7 @@ class BackupController extends Controller
     {
         return array_reverse(array_map(function ($file) {
             return [
-                'size' => round(Storage::size($file) / 1024) . 'KB',
+                'size' => static::bytesToHuman(Storage::size($file)),
                 'tanggal' => date('d-M-Y H:i:s', Storage::lastModified($file)),
                 'file' => $file,
                 'url' => Storage::url($file)
@@ -76,5 +76,16 @@ class BackupController extends Controller
         }
 
         return ['message' => 'Database telah di restore'];
+    }
+
+    public static function bytesToHuman($bytes)
+    {
+        $units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
+
+        for ($i = 0; $bytes > 1024; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 }
