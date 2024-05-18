@@ -1,27 +1,18 @@
 "use strict";
 const { Model } = require("sequelize");
-const { Socket } = require("net");
+const { SerialPort } = require("serialport");
+const Readline = require("@serialport/parser-readline");
 
 module.exports = (sequelize, DataTypes) => {
   class Gate extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-
-    socketClient;
+    port;
 
     async reconnect() {
       try {
         await this.reload();
 
-        if (this.socketClient instanceof Socket) {
-          this.socketClient.removeAllListeners();
-          this.socketClient.destroy();
+        if (this.port instanceof SerialPort) {
+          this.port = null;
         }
 
         setTimeout(() => {
@@ -37,19 +28,22 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     scan() {
-      this.socketClient = new Socket();
-      this.socketClient.setKeepAlive(true, 5000);
-      const { name, host, port = 5000 } = this;
-      console.log(`Connecting to gate ${name}...`);
-
-      this.socketClient.connect(port, host, () => {
-        console.log(`${name} - CONNECTED`);
+      const { name, host: path } = this;
+      this.port = new SerialPort({
+        path,
+        baudRate: 9600,
       });
 
-      this.socketClient.on("data", async (bufferData) => {
+      console.log(`Connecting to gate ${name}...`);
+
+      this.port.on("open", () => {
+        console.log(`Serial ${path} opened`);
+      });
+
+      this.port.on("data", async (bufferData) => {
         const data = bufferData.toString().slice(1, -1); // remove header and footer
         const prefix = data.slice(0, 2);
-        if (!["PT", "QT"].includes(prefix)) return;
+        if (!["W", "X"].includes(prefix)) return;
         let card_number = data.slice(2, 12); // take 36 characters only
         try {
           await fetch("http://localhost/api/accessLog", {
@@ -61,13 +55,13 @@ module.exports = (sequelize, DataTypes) => {
             },
           });
           // open gate
-          this.socketClient.write(Buffer.from(`\xA6TRIG1\xA9`));
+          this.port.write(Buffer.from(`\xA6TRIG1\xA9`));
         } catch (error) {
           console.log(error.message);
         }
       });
 
-      this.socketClient.on("error", (error) => {
+      this.port.on("error", (error) => {
         console.log(`${name} - ERROR - ${error.message}`);
         this.reconnect();
       });
