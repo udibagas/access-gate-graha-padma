@@ -23,12 +23,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('accessLog', [AccessLogController::class, 'store']);
-Route::get('accessGate', [AccessLogController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // AUTH RELATED
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('accessGate', [AccessLogController::class, 'index']);
 
     // MASTER DATA
     Route::middleware('admin')->group(function () {
