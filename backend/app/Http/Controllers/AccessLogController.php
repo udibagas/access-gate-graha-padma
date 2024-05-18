@@ -87,7 +87,7 @@ class AccessLogController extends Controller
             return response('EXPIRED', 403);
         }
 
-        $gate   = AccessGate::where('host', $request->ip())->first();
+        $gate   = AccessGate::where('host', $request->ip)->first();
 
         if ($member->group == Member::GROUP_MEMBER) {
             $lastAccess = $member->accessLogs()->latest()->first();

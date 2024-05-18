@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
           try {
             await fetch("http://localhost/api/accessLog", {
               method: "post",
-              body: JSON.stringify({ card_number }),
+              body: JSON.stringify({ card_number, ip: path }),
               headers: {
                 "Content-Type": "application/json",
               },
