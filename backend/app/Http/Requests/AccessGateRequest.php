@@ -26,7 +26,7 @@ class AccessGateRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'type' => 'required|max:255',
-            'host' => 'required|ipv4'
+            'host' => 'required'
         ];
     }
 }
