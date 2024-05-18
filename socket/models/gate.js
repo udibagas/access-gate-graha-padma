@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       this.port = new SerialPort({
         path,
         // baudRate: 9600,
+        baudRate: 19200,
       });
 
       console.log(`Connecting to gate ${name}...`);
@@ -45,7 +46,8 @@ module.exports = (sequelize, DataTypes) => {
         const data = bufferData.toString().slice(1, -1); // remove header and footer
         const prefix = data.slice(0, 2);
         if (!["W", "X"].includes(prefix)) return;
-        let card_number = data.slice(2, 12); // take 36 characters only
+        let card_number = data.slice(2, 10); // take 8 characters only
+        card_number = parseInt(card_number, 16); // convert to decimal
         try {
           await fetch("http://localhost/api/accessLog", {
             method: "post",
@@ -56,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
             },
           });
           // open gate
-          this.port.write(Buffer.from(`\xA6TRIG1\xA9`));
+          this.port.write(Buffer.from(`*TRIG1#`));
         } catch (error) {
           console.log(error.message);
         }
