@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       console.log(`Connecting to gate ${name}...`);
 
       this.port.on("open", () => {
-        console.log(`Serial ${path} opened`);
+        console.log(`Serial ${path} (${name}) opened`);
       });
 
       let data = "";
@@ -45,13 +45,13 @@ module.exports = (sequelize, DataTypes) => {
       this.port.on("data", async (bufferData) => {
         data += bufferData.toString();
 
-        if (data.at(-1) == "#") {
-          console.log(`${name} : ${data}`);
-          data = data.slice(1, -1); // remove header and footer
-          const prefix = data.slice(0, 2);
-          if (!["W", "X"].includes(prefix)) return;
-          let card_number = data.slice(2, 10); // take 8 characters only
+        // sudah akhir dari response
+        if (data.includes("*W") && data.includes("#")) {
+          let card_number = data.split("#")[0].slice(-8); // take 8 character only
           card_number = parseInt(card_number, 16); // convert to decimal
+          console.log(`${name}: ${card_number}`);
+
+          // hit api
           try {
             await fetch("http://localhost/api/accessLog", {
               method: "post",
