@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('accessLog', [AccessLogController::class, 'store']);
+Route::get('accessGate', [AccessLogController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // AUTH RELATED
@@ -32,10 +33,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // MASTER DATA
     Route::middleware('admin')->group(function () {
         Route::get('camera/test/{camera}', [CameraController::class, 'test']);
+        Route::apiResource('accessGate', AccessGateController::class, ['except' => 'index']);
 
         Route::apiResources([
             'user' => UserController::class,
-            'accessGate' => AccessGateController::class,
             'camera' => CameraController::class
         ]);
 
