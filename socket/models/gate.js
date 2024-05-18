@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       this.port.on("data", async (bufferData) => {
         const data = bufferData.toString().slice(1, -1); // remove header and footer
         const prefix = data.slice(0, 2);
+        console.log(`${name} : ${data}`);
         if (!["W", "X"].includes(prefix)) return;
         let card_number = data.slice(2, 12); // take 36 characters only
         try {
