@@ -31,8 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       const { name, host: path } = this;
       this.port = new SerialPort({
         path,
-        // baudRate: 9600,
-        baudRate: 19200,
+        baudRate: 9600,
       });
 
       console.log(`Connecting to gate ${name}...`);
@@ -41,25 +40,34 @@ module.exports = (sequelize, DataTypes) => {
         console.log(`Serial ${path} opened`);
       });
 
+      let data = "";
+
       this.port.on("data", async (bufferData) => {
-        console.log(`${name} : ${bufferData.toString()}`);
-        const data = bufferData.toString().slice(1, -1); // remove header and footer
-        const prefix = data.slice(0, 2);
-        if (!["W", "X"].includes(prefix)) return;
-        let card_number = data.slice(2, 10); // take 8 characters only
-        card_number = parseInt(card_number, 16); // convert to decimal
-        try {
-          await fetch("http://localhost/api/accessLog", {
-            method: "post",
-            body: JSON.stringify({ card_number }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          // open gate
-          this.port.write(Buffer.from(`*TRIG1#`));
-        } catch (error) {
-          console.log(error.message);
+        data += bufferData.toString();
+
+        if (data.at(-1) == "#") {
+          console.log(`${name} : ${data}`);
+          data = data.slice(1, -1); // remove header and footer
+          const prefix = data.slice(0, 2);
+          if (!["W", "X"].includes(prefix)) return;
+          let card_number = data.slice(2, 10); // take 8 characters only
+          card_number = parseInt(card_number, 16); // convert to decimal
+          try {
+            await fetch("http://localhost/api/accessLog", {
+              method: "post",
+              body: JSON.stringify({ card_number }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            // open gate
+            this.port.write(Buffer.from(`*TRIG1#`));
+          } catch (error) {
+            console.log(error.message);
+          }
+
+          // reset data
+          data = "";
         }
       });
 
