@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       const { name, host: path } = this;
       this.port = new SerialPort({
         path,
-        baudRate: 9600,
+        // baudRate: 9600,
       });
 
       console.log(`Connecting to gate ${name}...`);
