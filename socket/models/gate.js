@@ -49,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         if (data.includes("*W") && data.includes("#")) {
           let card_number = data.split("#")[0].slice(-8); // take 8 character only
           card_number = parseInt(card_number, 16); // convert to decimal
+          if (isNaN(card_number)) return;
           console.log(`${name}: ${card_number}`);
 
           // hit api
