@@ -54,7 +54,6 @@ module.exports = (sequelize, DataTypes) => {
             body: JSON.stringify({ card_number }),
             headers: {
               "Content-Type": "application/json",
-              Accept: "application/json",
             },
           });
           // open gate
