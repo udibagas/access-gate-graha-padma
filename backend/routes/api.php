@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // AUTH RELATED
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('accessGate', [AccessLogController::class, 'index']);
+    Route::get('accessGate', [AccessGateController::class, 'index']);
 
     // MASTER DATA
     Route::middleware('admin')->group(function () {
