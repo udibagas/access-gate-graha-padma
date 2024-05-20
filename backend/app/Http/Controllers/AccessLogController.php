@@ -15,7 +15,7 @@ class AccessLogController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('registeredDevice')->only('store');
+        // $this->middleware('registeredDevice')->only('store');
     }
 
     /**
