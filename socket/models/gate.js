@@ -59,11 +59,12 @@ module.exports = (sequelize, DataTypes) => {
               body: JSON.stringify({ card_number, ip: path }),
               headers: {
                 "Content-Type": "application/json",
+                Accept: "application/json",
               },
             });
 
-            const text = await res.text();
-            console.log(`${name}: ${text}`);
+            const json = await res.json();
+            console.log(`${name}: ${json}`);
 
             // open gate
             this.port.write(Buffer.from(`*TRIG1#`));

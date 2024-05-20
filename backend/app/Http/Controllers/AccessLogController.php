@@ -76,15 +76,15 @@ class AccessLogController extends Controller
         $member = Member::where('card_number', $request->card_number)->first();
 
         if (!$member) {
-            return response('UNREGISTERED', 404);
+            return response(['message' => 'UNREGISTERED'], 404);
         }
 
         if (!$member->active) {
-            return response('INACTIVE', 403);
+            return response(['message' => 'INACTIVE'], 403);
         }
 
         if ($member->is_expired) {
-            return response('EXPIRED', 403);
+            return response(['message' => 'EXPIRED'], 403);
         }
 
         $gate   = AccessGate::where('host', $request->ip)->first();
@@ -94,13 +94,13 @@ class AccessLogController extends Controller
 
             if ($gate->type == 'IN') {
                 if ($lastAccess && $lastAccess->accessGate->type == 'IN') {
-                    return response('BELUM OUT', 403);
+                    return response(['message' => 'BELUM OUT'], 403);
                 }
             }
 
             if ($gate->type == 'OUT') {
                 if (!$lastAccess || $lastAccess->accessGate->type == 'OUT') {
-                    return response('BELUM IN', 403);
+                    return response(['message' => 'BELUM IN'], 403);
                 }
             }
         }
@@ -113,7 +113,7 @@ class AccessLogController extends Controller
         ]);
 
         TakeSnapshot::dispatch($accessLog);
-        return response('OK');
+        return response(['message' => 'OK']);
     }
 
     /**
