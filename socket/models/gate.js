@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       parser.on("data", async (bufferData) => {
         const data = bufferData.toString();
         console.log(`${name} : ${data}`);
-        if (!data.starstWith("*W")) return;
+        if (!data.startsWith("*W")) return;
 
         let card_number = data.slice(2, 10);
         card_number = parseInt(card_number, 16); // convert to decimal
