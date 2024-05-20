@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
           try {
             this.scan();
           } catch (error) {
-            console.log(`${this.name} - ERROR - ${error.message}`);
+            console.error(`${this.name} - ERROR - ${error.message}`);
           }
         }, 1000);
       } catch (error) {
-        console.log(`${this.name} - ERROR - ${error.message}`);
+        console.error(`${this.name} - ERROR - ${error.message}`);
       }
     }
 
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
             // open gate
             this.port.write(Buffer.from(`*TRIG1#`));
           } catch (error) {
-            console.log(error.message);
+            console.error(error.message);
           }
 
           // reset data
