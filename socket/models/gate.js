@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             const json = await res.json();
-            console.log(`${name}: ${json}`);
+            console.log(`${name}: ${JSON.stringify(json)}`);
 
             // open gate
             this.port.write(Buffer.from(`*TRIG1#`));
