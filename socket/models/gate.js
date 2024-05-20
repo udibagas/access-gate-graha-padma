@@ -43,42 +43,38 @@ module.exports = (sequelize, DataTypes) => {
       let data = "";
 
       this.port.on("data", async (bufferData) => {
-        data += bufferData.toString();
-
+        console.log(`${name} : ${bufferData.toString()}`);
+        // data += bufferData.toString();
         // sudah akhir dari response
-        if (data.includes("*W") && data.includes("#")) {
-          let card_number = data.split("#")[0].slice(-8); // take 8 character only
-          card_number = parseInt(card_number, 16); // convert to decimal
-          if (isNaN(card_number)) return;
-          console.log(`${name}: ${card_number}`);
-
-          // hit api
-          try {
-            const res = await fetch("http://localhost/api/accessLog", {
-              method: "POST",
-              body: JSON.stringify({ card_number, ip: path }),
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            });
-
-            const json = await res.json();
-            console.log(`${name}: ${JSON.stringify(json)}`);
-
-            // open gate
-            this.port.write(Buffer.from(`*TRIG1#`));
-          } catch (error) {
-            console.error(error.message);
-          }
-
-          // reset data
-          data = "";
-        }
+        // if (data.includes("*W") && data.includes("#")) {
+        //   let card_number = data.split("#")[0].slice(-8); // take 8 character only
+        //   card_number = parseInt(card_number, 16); // convert to decimal
+        //   if (isNaN(card_number)) return;
+        //   console.log(`${name}: ${card_number}`);
+        //   // hit api
+        //   try {
+        //     const res = await fetch("http://localhost/api/accessLog", {
+        //       method: "POST",
+        //       body: JSON.stringify({ card_number, ip: path }),
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //         Accept: "application/json",
+        //       },
+        //     });
+        //     const json = await res.json();
+        //     console.log(`${name}: ${JSON.stringify(json)}`);
+        //     // open gate
+        //     this.port.write(Buffer.from(`*TRIG1#`));
+        //   } catch (error) {
+        //     console.error(error.message);
+        //   }
+        //   // reset data
+        //   data = "";
+        // }
       });
 
       this.port.on("error", (error) => {
-        console.log(`${name} - ERROR - ${error.message}`);
+        console.error(`${name} - ERROR - ${error.message}`);
         this.reconnect();
       });
     }
