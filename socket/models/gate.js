@@ -54,13 +54,17 @@ module.exports = (sequelize, DataTypes) => {
 
           // hit api
           try {
-            await fetch("http://localhost/api/accessLog", {
-              method: "post",
+            const res = await fetch("http://localhost/api/accessLog", {
+              method: "POST",
               body: JSON.stringify({ card_number, ip: path }),
               headers: {
                 "Content-Type": "application/json",
               },
             });
+
+            const text = await res.text();
+            console.log(`${name}: ${text}`);
+
             // open gate
             this.port.write(Buffer.from(`*TRIG1#`));
           } catch (error) {
