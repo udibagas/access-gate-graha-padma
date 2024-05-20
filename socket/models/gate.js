@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 const { SerialPort } = require("serialport");
-const Readline = require("@serialport/parser-readline");
+const { DelimiterParser } = require("@serialport/parser-delimiter");
 
 module.exports = (sequelize, DataTypes) => {
   class Gate extends Model {
@@ -40,36 +40,31 @@ module.exports = (sequelize, DataTypes) => {
         console.log(`Serial ${path} (${name}) opened`);
       });
 
-      let data = "";
+      const parser = this.port.pipe(new DelimiterParser({ delimiter: "#" }));
+      parser.on("data", async (bufferData) => {
+        const data = bufferData.toString();
+        console.log(`${name} : ${data}`);
+        if (!data.starstWith("*W")) return;
 
-      this.port.on("data", async (bufferData) => {
-        console.log(`${name} : ${bufferData.toString()}`);
-        data += bufferData.toString();
-        // sudah akhir dari response
-        if (data.at(-1) == "#") {
-          let card_number = data.split("#")[0].slice(-8); // take 8 character only
-          card_number = parseInt(card_number, 16); // convert to decimal
-          if (isNaN(card_number)) return;
-          console.log(`${name}: ${card_number}`);
-          // hit api
-          try {
-            const res = await fetch("http://localhost/api/accessLog", {
-              method: "POST",
-              body: JSON.stringify({ card_number, ip: path }),
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            });
-            const json = await res.json();
-            console.log(`${name}: ${JSON.stringify(json)}`);
-            // open gate
-            this.port.write(Buffer.from(`*TRIG1#`));
-          } catch (error) {
-            console.error(error.message);
-          }
-          // reset data
-          data = "";
+        let card_number = data.slice(2, 10);
+        card_number = parseInt(card_number, 16); // convert to decimal
+        console.log(`${name}: ${card_number}`);
+        // hit api
+        try {
+          const res = await fetch("http://localhost/api/accessLog", {
+            method: "POST",
+            body: JSON.stringify({ card_number, ip: path }),
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
+          const json = await res.json();
+          console.log(`${name}: ${JSON.stringify(json)}`);
+          // open gate
+          this.port.write(Buffer.from(`*TRIG1#`));
+        } catch (error) {
+          console.error(error.message);
         }
       });
 
