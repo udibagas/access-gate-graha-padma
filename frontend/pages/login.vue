@@ -5,7 +5,7 @@
 		</div>
 		<h4 class="text-center my-3" style="color: #2ed1a2">
 			Gate Akses <br />
-			Taman Raflesia Graha Padma
+			Cluster Adenia
 		</h4>
 		<el-form style="width: 350px" label-position="top" class="p-3">
 			<el-form-item>

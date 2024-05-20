@@ -2,7 +2,7 @@
 	<el-container>
 		<el-header>
 			<img src="/logo.png" style="height: 60px; margin-right: 20px" alt="" />
-			<div class="title flex-grow-1">Gate Akses Taman Raflesia Graha Padma</div>
+			<div class="title flex-grow-1">Gate Akses Cluster Adenia</div>
 			<div class="d-flex">
 				<el-menu
 					mode="horizontal"
