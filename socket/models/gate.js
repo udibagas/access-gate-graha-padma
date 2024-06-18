@@ -59,7 +59,9 @@ module.exports = (sequelize, DataTypes) => {
               Accept: "application/json",
             },
           });
+
           const json = await res.json();
+          if (res.statusText != "OK") throw new Error(json.message);
           console.log(`${name}: ${JSON.stringify(json)}`);
           // open gate
           this.port.write(Buffer.from(`*TRIG1#`));
