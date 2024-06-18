@@ -250,7 +250,7 @@ export default {
 	mounted() {
 		Echo.channel('member').listen('.tap', (e) => {
 			this.refreshData()
-			this.showSnapshot(e.accessLog)
+			// this.showSnapshot(e.accessLog)
 
 			setTimeout(() => {
 				this.snapshotDialog = false
