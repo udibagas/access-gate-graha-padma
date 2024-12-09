@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { Gate } = require("./models");
 
 (async () => {
