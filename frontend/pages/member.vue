@@ -88,10 +88,10 @@
       ></el-table-column>
 
       <el-table-column
-        prop="sex_label"
+        prop="gender_label"
         label="Jenis Kelamin"
         show-overflow-tooltip
-        column-key="sex"
+        column-key="gender"
         align="center"
         header-align="center"
         width="160"
@@ -230,9 +230,12 @@
               <el-input v-model="form.name" placeholder="Nama"></el-input>
             </el-form-item>
 
-            <el-form-item label="Jenis Kelamin" :error="errors.sex?.join(',')">
-              <el-radio :label="1" v-model="form.sex">LAKI - LAKI</el-radio>
-              <el-radio :label="0" v-model="form.sex">PEREMPUAN</el-radio>
+            <el-form-item
+              label="Jenis Kelamin"
+              :error="errors.gender?.join(',')"
+            >
+              <el-radio :label="1" v-model="form.gender">LAKI - LAKI</el-radio>
+              <el-radio :label="0" v-model="form.gender">PEREMPUAN</el-radio>
             </el-form-item>
 
             <el-form-item
@@ -402,7 +405,7 @@ export default {
         var dataToImport = res.map((r) => {
           return {
             name: r[1] || '',
-            sex: r[2] ? (r[2] == 'LAKI - LAKI' ? 1 : 0) : '',
+            gender: r[2] ? (r[2] == 'LAKI - LAKI' ? 1 : 0) : '',
             id_number: r[3] || '',
             address: r[4] || '',
             phone: r[5] || '',

@@ -24,7 +24,7 @@ class Member extends Model
         'active',
         'id_number',
         'address',
-        'sex'
+        'gender'
     ];
 
     protected $appends = [
@@ -32,7 +32,7 @@ class Member extends Model
         'readable_expired_date',
         'group_name',
         'status',
-        'sex_label'
+        'gender_label'
     ];
 
     public function accessLogs()
@@ -84,8 +84,8 @@ class Member extends Model
         return $this->active ? 'AKTIF' : 'TIDAK AKTIF';
     }
 
-    public function getSexLabelAttribute()
+    public function getGenderLabelAttribute()
     {
-        return $this->sex === null ? 'N/A' : ($this->sex ? 'LAKI - LAKI' : 'PEREMPUAN');
+        return $this->gender === null ? 'N/A' : ($this->gender ? 'LAKI - LAKI' : 'PEREMPUAN');
     }
 }

@@ -16,7 +16,7 @@ class AddDetailsColumnOnMembers extends Migration
         Schema::table('members', function (Blueprint $table) {
             $table->string('id_number')->nullable();
             $table->text('address')->nullable();
-            $table->boolean('sex')->nullable();
+            $table->boolean('gender')->nullable();
         });
     }
 
@@ -28,7 +28,7 @@ class AddDetailsColumnOnMembers extends Migration
     public function down()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn(['id_number', 'address', 'sex']);
+            $table->dropColumn(['id_number', 'address', 'gender']);
         });
     }
 }
