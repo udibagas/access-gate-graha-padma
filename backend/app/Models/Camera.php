@@ -11,6 +11,9 @@ class Camera extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'url', 'user', 'pass'
+        'name',
+        'url',
+        'user',
+        'pass'
     ];
 }
