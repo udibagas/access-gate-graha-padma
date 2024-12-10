@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     scan() {
-      const { name, host: path } = this;
+      const { name, device: path, id: access_gate_id } = this;
       this.port = new SerialPort({
         path,
         baudRate: 9600,
@@ -44,8 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       parser.on("data", async (bufferData) => {
         const data = bufferData.toString();
         console.log(`${name} : ${data}`);
-        if (!data.startsWith("*W")) return;
+        // skip kalau bukan detect card
+        if (!data.startsWith("*W") || !data.startsWith("*X")) return;
 
+        const prefix = data[1];
         let card_number = data.slice(2, 10);
         card_number = parseInt(card_number, 16); // convert to decimal
         console.log(`${name}: ${card_number}`);
@@ -53,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         try {
           const res = await fetch("http://localhost/api/accessLog", {
             method: "POST",
-            body: JSON.stringify({ card_number, ip: path }),
+            body: JSON.stringify({ card_number, prefix, access_gate_id }),
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
@@ -80,9 +82,7 @@ module.exports = (sequelize, DataTypes) => {
   Gate.init(
     {
       name: DataTypes.STRING,
-      type: DataTypes.STRING,
-      cameras: DataTypes.JSON,
-      host: DataTypes.STRING,
+      device: DataTypes.STRING,
     },
     {
       sequelize,
