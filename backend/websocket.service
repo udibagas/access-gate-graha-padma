@@ -5,7 +5,7 @@ Requires=network.target
 [Service]
 User=server
 WorkingDirectory=/home/server/access-gate-graha-padma/backend
-ExecStart=/usr/bin/php artisan websocket:serve
+ExecStart=/usr/bin/php artisan reverb:start
 Restart=always
 RestartSec=3
 
