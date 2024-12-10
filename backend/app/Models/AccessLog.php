@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,8 +12,10 @@ class AccessLog extends Model
     protected $fillable = [
         'member_id',
         'access_gate_id',
+        'card_reader_id',
         'card_number',
-        'plate_number'
+        'plate_number',
+        'type'
     ];
 
     protected $with = ['member', 'accessGate', 'snapshots'];
@@ -29,6 +30,11 @@ class AccessLog extends Model
     public function accessGate()
     {
         return $this->belongsTo(AccessGate::class);
+    }
+
+    public function cardReader()
+    {
+        return $this->belongsTo(CardReader::class);
     }
 
     public function snapshots()

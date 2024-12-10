@@ -17,6 +17,10 @@ class CreateAccessLogsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('member_id');
             $table->unsignedBigInteger('access_gate_id');
+            $table->unsignedBigInteger('card_reader_id');
+            $table->string('card_number')->nullable();
+            $table->string('plate_number')->nullable();
+            $table->enum('type', ['IN', 'OUT']);
             $table->timestamps();
         });
     }
