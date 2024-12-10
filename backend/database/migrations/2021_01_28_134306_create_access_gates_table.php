@@ -16,9 +16,7 @@ class CreateAccessGatesTable extends Migration
         Schema::create('access_gates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type');
-            $table->string('host');
-            $table->json('cameras');
+            $table->string('device');
             $table->timestamps();
         });
     }

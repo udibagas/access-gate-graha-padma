@@ -1,7 +1,7 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
     <div slot="header" class="d-flex justify-content-between">
-      <h3 class="text-muted mt-2">ACCESS GATE</h3>
+      <h3 class="text-muted mt-2">CARD READER</h3>
       <el-form inline @submit.native.prevent>
         <el-form-item class="mb-0">
           <el-button
@@ -10,7 +10,7 @@
             icon="el-icon-plus"
             size="small"
             title="Tambah Gate"
-            >TAMBAH GATE</el-button
+            >TAMBAH READER</el-button
           >
         </el-form-item>
         <el-form-item class="mb-0">
@@ -45,8 +45,15 @@
         label="#"
         :index="paginated ? pagination.from : 1"
       ></el-table-column>
-      <el-table-column prop="name" label="Nama"></el-table-column>
-      <el-table-column prop="device" label="Device"></el-table-column>
+      <el-table-column prop="access_gate.name" label="Gate"></el-table-column>
+      <el-table-column prop="name" label="Name"></el-table-column>
+      <el-table-column prop="prefix" label="Prefix"></el-table-column>
+      <el-table-column prop="type" label="Jenis"></el-table-column>
+      <el-table-column label="Kamera">
+        <template slot-scope="{ row }">
+          {{ row.camera_names?.join(', ') }}
+        </template>
+      </el-table-column>
 
       <ActionColumn
         @refreshData="refreshData"
@@ -65,19 +72,66 @@
     />
 
     <el-dialog
-      title="GATE"
+      title="CARD READER"
+      width="450px"
       :visible.sync="showForm"
       :before-close="closeForm"
       :close-on-click-modal="false"
-      width="450px"
     >
       <el-form label-width="120px" label-position="left">
         <el-form-item label="Name" :error="errors.name?.join(',')">
           <el-input v-model="form.name" placeholder="Name"></el-input>
         </el-form-item>
 
-        <el-form-item label="Device" :error="errors.device?.join(',')">
-          <el-input v-model="form.device" placeholder="Device"></el-input>
+        <el-form-item label="Gate" :error="errors.access_gate_id?.join(',')">
+          <el-select
+            style="width: 100%"
+            v-model="form.access_gate_id"
+            placeholder="Gate"
+          >
+            <el-option
+              v-for="g in accessGateList"
+              :key="g.id"
+              :value="g.id"
+              :label="g.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Prefix" :error="errors.prefix?.join(',')">
+          <el-input v-model="form.prefix" placeholder="Prefix"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Jenis" :error="errors.type?.join(',')">
+          <el-select
+            v-model="form.type"
+            placeholder="Jenis"
+            style="width: 100%"
+          >
+            <el-option label="IN" value="IN"></el-option>
+            <el-option label="OUT" value="OUT"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Kamera" :error="errors.camera_ids?.join(',')">
+          <el-select
+            style="width: 100%"
+            v-model="form.camera_ids"
+            placeholder="Kamera"
+            filterable
+            default-first-option
+            remote
+            clearable
+            multiple
+            :remote-method="(q) => getList('/api/camera', 'cameraList', q)"
+          >
+            <el-option
+              v-for="camera in cameraList"
+              :key="camera.id"
+              :value="camera.id"
+              :label="camera.name"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
 
@@ -109,11 +163,12 @@ export default {
 
   created() {
     this.getList('/api/camera', 'cameraList')
+    this.getList('/api/accessGate', 'accessGateList')
   },
 
   data() {
     return {
-      url: '/api/accessGate',
+      url: '/api/cardReader',
     }
   },
 }

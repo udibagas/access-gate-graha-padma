@@ -9,14 +9,10 @@ class AccessGate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'type', 'cameras', 'host'];
+    protected $fillable = ['name', 'device'];
 
-    protected $casts = ['cameras' => 'json'];
-
-    protected $appends = ['camera_list'];
-
-    public function getCameraListAttribute()
+    public function cardReaders()
     {
-        return Camera::whereIn('id', $this->cameras)->get();
+        return $this->hasMany(CardReader::class);
     }
 }

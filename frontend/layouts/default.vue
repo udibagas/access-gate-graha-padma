@@ -61,14 +61,13 @@ export default {
       showProfileDialog: false,
       menus: [
         {label: 'Home', link: '/', roles: [0, 1]},
-        // {label: 'Log', link: '/access-log', roles: [0, 1]},
         {label: 'Snapshot', link: '/snapshot', roles: [0, 1]},
         {label: 'Member', link: '/member', roles: [0, 1]},
         {label: 'Gate', link: '/access-gate', roles: [1]},
         {label: 'Camera', link: '/camera', roles: [1]},
+        {label: 'Card Reader', link: '/card-reader', roles: [1]},
         {label: 'User', link: '/user', roles: [1]},
         {label: 'Backup', link: '/backup', roles: [1]},
-        // {label: 'Setting', link: '/setting', roles: [1]},
       ]
     }
   },

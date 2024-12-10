@@ -5,6 +5,7 @@ use App\Http\Controllers\AccessLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\CameraController;
+use App\Http\Controllers\CardReaderController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SnapshotController;
 use App\Http\Controllers\UserController;
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::middleware('admin')->group(function () {
         Route::get('camera/test/{camera}', [CameraController::class, 'test']);
         Route::apiResource('accessGate', AccessGateController::class, ['except' => 'index']);
+        Route::apiResource('cardReader', CardReaderController::class, ['except' => 'show']);
 
         Route::apiResources([
             'user' => UserController::class,

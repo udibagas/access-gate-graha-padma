@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AccessGateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class AccessGateRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check();
+        return Auth::check();
     }
 
     /**
@@ -25,8 +26,7 @@ class AccessGateRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'type' => 'required|max:255',
-            'host' => 'required'
+            'device' => 'required|max:255',
         ];
     }
 }
