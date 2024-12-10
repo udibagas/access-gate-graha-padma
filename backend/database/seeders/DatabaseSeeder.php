@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(AccessGateSeeder::class);
         $this->call(CameraSeeder::class);
+        $this->call(CardReaderSeeder::class);
     }
 }
