@@ -45,10 +45,10 @@
         label="#"
         :index="paginated ? pagination.from : 1"
       ></el-table-column>
-      <el-table-column prop="name" label="Name"></el-table-column>
+      <el-table-column prop="name" label="Name" width="200"></el-table-column>
       <el-table-column prop="url" label="URL"></el-table-column>
-      <el-table-column prop="user" label="User"></el-table-column>
-      <el-table-column prop="pass" label="Pass"></el-table-column>
+      <el-table-column prop="user" label="User" width="200"></el-table-column>
+      <el-table-column prop="pass" label="Pass" width="200"></el-table-column>
 
       <el-table-column
         fixed="right"
