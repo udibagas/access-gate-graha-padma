@@ -6,6 +6,7 @@ use App\Http\Requests\AccessLogRequest;
 use App\Jobs\TakeSnapshot;
 use App\Models\AccessGate;
 use App\Models\AccessLog;
+use App\Models\CardReader;
 use App\Models\Member;
 use App\Models\Snapshot;
 use Illuminate\Http\Request;
@@ -87,18 +88,23 @@ class AccessLogController extends Controller
             return response(['message' => 'EXPIRED'], 403);
         }
 
-        $gate   = AccessGate::where('host', $request->ip)->first();
+        $gate   = AccessGate::find($request->access_gate_id);
+        $cardReader = $gate->cardReaders()->where('prefix', $request->prefix)->first();
+
+        if (!$cardReader) {
+            return response(['message' => 'UNREGISTERED DEVICE'], 404);
+        }
 
         if ($member->group == Member::GROUP_MEMBER) {
             $lastAccess = $member->accessLogs()->latest()->first();
 
-            if ($gate->type == 'IN') {
+            if ($cardReader->type == 'IN') {
                 if ($lastAccess && $lastAccess->accessGate->type == 'IN') {
                     return response(['message' => 'BELUM OUT'], 403);
                 }
             }
 
-            if ($gate->type == 'OUT') {
+            if ($cardReader->type == 'OUT') {
                 if (!$lastAccess || $lastAccess->accessGate->type == 'OUT') {
                     return response(['message' => 'BELUM IN'], 403);
                 }
@@ -107,9 +113,11 @@ class AccessLogController extends Controller
 
         $accessLog = AccessLog::create([
             'member_id' => $member->id,
-            'access_gate_id' => $gate->id,
+            'access_gate_id' => $request->access_gate_id,
+            'card_reader_id' => $cardReader->id,
             'card_number' => $request->card_number,
-            'plate_number' => $member->plate_number
+            'plate_number' => $member->plate_number,
+            'type' => $$cardReader->type
         ]);
 
         TakeSnapshot::dispatch($accessLog);

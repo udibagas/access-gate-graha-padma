@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Events\MemberTapEvent;
 use App\Models\AccessGate;
 use App\Models\AccessLog;
+use App\Models\Camera;
 use App\Notifications\CameraErrorNotification;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -39,8 +40,9 @@ class TakeSnapshot implements ShouldQueue
     public function handle()
     {
         $client = new Client(['timeout' => 3]);
+        $cameras = Camera::whereIn('id', $this->accessLog->cardReader->camera_ids)->get();
 
-        foreach ($this->accessLog->accessGate->cameraList as $camera) {
+        foreach ($cameras as $camera) {
             try {
                 $response = $client->request('GET', $camera->url, [
                     'auth' => [
