@@ -91,7 +91,7 @@
       ></el-table-column>
 
       <el-table-column
-        prop="access_gate.type"
+        prop="type"
         label="Jenis"
         align="center"
         header-align="center"
