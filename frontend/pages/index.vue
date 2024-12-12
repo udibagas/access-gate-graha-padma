@@ -246,18 +246,22 @@ export default {
   },
 
   mounted() {
-    echo.channel('member').listen('.tap', (e) => {
-      this.refreshData()
-      // this.showSnapshot(e.accessLog)
-
-      setTimeout(() => {
-        this.snapshotDialog = false
-      }, 5000)
-    })
+    echo
+      .listen(
+        'notification',
+        'Illuminate.Notifications.Events.BroadcastNotificationCreated'
+      )
+      .notification((e) => {
+        this.refreshData()
+        // this.showSnapshot(e.accessLog)
+        // setTimeout(() => {
+        //   this.snapshotDialog = false
+        // }, 5000)
+      })
   },
 
   destroyed() {
-    echo.leave('member')
+    echo.leave('notification')
   },
 }
 </script>

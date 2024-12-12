@@ -5,8 +5,6 @@ namespace App\Events;
 use App\Models\AccessLog;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -34,11 +32,6 @@ class MemberTapEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('member');
-    }
-
-    public function broadcastAs()
-    {
-        return 'tap';
+        return new Channel('notification');
     }
 }
