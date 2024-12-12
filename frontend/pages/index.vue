@@ -247,16 +247,27 @@ export default {
 
   mounted() {
     echo
-      .listen(
-        'notification',
-        'Illuminate.Notifications.Events.BroadcastNotificationCreated'
-      )
-      .notification((e) => {
+      .channel('notification')
+      .listen('MemberTapEvent', (e) => {
         this.refreshData()
         // this.showSnapshot(e.accessLog)
         // setTimeout(() => {
         //   this.snapshotDialog = false
         // }, 5000)
+      })
+      .listen('CardErrorEvent', (e) => {
+        this.$message({
+          message: e.message,
+          type: 'error',
+          showClose: true,
+        })
+      })
+      .listen('CameraErrorEvent', (e) => {
+        this.$message({
+          message: e.message,
+          type: 'error',
+          showClose: true,
+        })
       })
   },
 

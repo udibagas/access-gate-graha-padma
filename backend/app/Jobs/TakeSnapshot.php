@@ -37,7 +37,7 @@ class TakeSnapshot implements ShouldQueue
      */
     public function handle()
     {
-        $client = new Client(['timeout' => 3]);
+        $client = new Client(['timeout' => 1]);
         $cameras = Camera::whereIn('id', $this->accessLog->cardReader->camera_ids)->get();
 
         foreach ($cameras as $camera) {

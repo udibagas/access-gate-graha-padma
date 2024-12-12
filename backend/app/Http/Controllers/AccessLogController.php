@@ -104,14 +104,14 @@ class AccessLogController extends Controller
 
             if ($cardReader->type == 'IN') {
                 if ($lastAccess && $lastAccess->type == 'IN') {
-                    event(new CardErrorEvent('ALREADY_IN', 'Sudah IN'));
-                    return response(['message' => 'BELUM OUT'], 403);
+                    event(new CardErrorEvent('ALREADY_IN', 'SUDAH IN'));
+                    return response(['message' => 'SUDAH IN'], 403);
                 }
             }
 
             if ($cardReader->type == 'OUT') {
                 if (!$lastAccess || $lastAccess->type == 'OUT') {
-                    event(new CardErrorEvent('NOT_IN', 'Belum IN'));
+                    event(new CardErrorEvent('NOT_IN', 'BELUM IN'));
                     return response(['message' => 'BELUM IN'], 403);
                 }
             }

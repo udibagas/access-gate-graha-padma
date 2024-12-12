@@ -1,0 +1,8 @@
+POST http://localhost:8000/api/accessLog
+Content-Type: application/json
+
+{
+  "card_number": "1111", 
+  "prefix": "W", 
+  "access_gate_id": 1
+}
