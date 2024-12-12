@@ -7,7 +7,12 @@
       Gate Akses <br />
       Taman Lavender
     </h4>
-    <el-form style="width: 350px" label-position="top" class="p-3">
+    <el-form
+      style="width: 350px"
+      label-position="top"
+      class="p-3"
+      @submit.native.prevent="login"
+    >
       <el-form-item>
         <el-input
           prefix-icon="el-icon-user"
@@ -25,9 +30,9 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width: 100%" @click="login"
-          >LOGIN</el-button
-        >
+        <el-button type="primary" style="width: 100%" native-type="submit">
+          LOGIN
+        </el-button>
       </el-form-item>
     </el-form>
 
