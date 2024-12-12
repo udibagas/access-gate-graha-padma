@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use App\Models\Camera;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class CameraErrorNotification extends Notification implements ShouldQueue
@@ -35,16 +36,15 @@ class CameraErrorNotification extends Notification implements ShouldQueue
         return ['broadcast'];
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
+    public function toBroadcast(object $notifiable): BroadcastMessage
     {
-        return [
-            'message' => "{$this->camera->name} gagal mengambil snapshot"
-        ];
+        return new BroadcastMessage([
+            'message' => 'Kamera ' . $this->camera->name . ' bermasalah',
+        ]);
+    }
+
+    public function broadcastOn()
+    {
+        return new Channel('notification');
     }
 }
