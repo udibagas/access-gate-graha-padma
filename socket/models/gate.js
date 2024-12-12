@@ -44,10 +44,13 @@ module.exports = (sequelize, DataTypes) => {
       parser.on("data", async (bufferData) => {
         const data = bufferData.toString();
         console.log(`${name} : ${data}`);
-        // skip kalau bukan detect card
-        if (!data.startsWith("*W") || !data.startsWith("*X")) return;
-
         const prefix = data[1];
+
+        // skip kalau bukan detect card
+        if (!"WX".includes(prefix)) {
+          return;
+        }
+
         let card_number = data.slice(2, 10);
         card_number = parseInt(card_number, 16); // convert to decimal
         console.log(`${name}: ${card_number}`);
