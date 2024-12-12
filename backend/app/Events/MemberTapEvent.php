@@ -13,17 +13,13 @@ class MemberTapEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $accessLog;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(AccessLog $accessLog)
-    {
-        $this->accessLog = $accessLog;
-    }
+    public function __construct(public AccessLog $accessLog) {}
 
     /**
      * Get the channels the event should broadcast on.
