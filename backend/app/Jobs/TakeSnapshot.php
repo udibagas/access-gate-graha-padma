@@ -2,14 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Events\CameraErrorEvent;
 use App\Events\MemberTapEvent;
-use App\Models\AccessGate;
 use App\Models\AccessLog;
 use App\Models\Camera;
-use App\Notifications\CameraErrorNotification;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -56,7 +54,7 @@ class TakeSnapshot implements ShouldQueue
                 $path = 'snapshots/' . date('Y/m/d/H/') . $fileName;
                 Storage::put($path, $response->getBody());
             } catch (\Exception $e) {
-                $camera->notify(new CameraErrorNotification($camera));
+                event(new CameraErrorEvent($camera));
                 continue;
             }
 
