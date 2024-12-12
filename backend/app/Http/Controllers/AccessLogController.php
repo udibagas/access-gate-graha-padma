@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CardErrorEvent;
 use App\Http\Requests\AccessLogRequest;
 use App\Jobs\TakeSnapshot;
 use App\Models\AccessGate;
@@ -77,14 +78,17 @@ class AccessLogController extends Controller
         $member = Member::where('card_number', $request->card_number)->first();
 
         if (!$member) {
+            event(new CardErrorEvent('UNREGISTERED', 'Kartu tidak terdaftar'));
             return response(['message' => 'UNREGISTERED'], 404);
         }
 
         if (!$member->active) {
+            event(new CardErrorEvent('INACTIVE', 'Kartu tidak aktif'));
             return response(['message' => 'INACTIVE'], 403);
         }
 
         if ($member->is_expired) {
+            event(new CardErrorEvent('EXPIRED', 'Kartu sudah kadaluarsa'));
             return response(['message' => 'EXPIRED'], 403);
         }
 
@@ -99,13 +103,15 @@ class AccessLogController extends Controller
             $lastAccess = $member->accessLogs()->latest()->first();
 
             if ($cardReader->type == 'IN') {
-                if ($lastAccess && $lastAccess->accessGate->type == 'IN') {
+                if ($lastAccess && $lastAccess->type == 'IN') {
+                    event(new CardErrorEvent('ALREADY_IN', 'Sudah IN'));
                     return response(['message' => 'BELUM OUT'], 403);
                 }
             }
 
             if ($cardReader->type == 'OUT') {
-                if (!$lastAccess || $lastAccess->accessGate->type == 'OUT') {
+                if (!$lastAccess || $lastAccess->type == 'OUT') {
+                    event(new CardErrorEvent('NOT_IN', 'Belum IN'));
                     return response(['message' => 'BELUM IN'], 403);
                 }
             }
