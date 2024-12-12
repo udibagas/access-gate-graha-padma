@@ -117,7 +117,7 @@ class AccessLogController extends Controller
             'card_reader_id' => $cardReader->id,
             'card_number' => $request->card_number,
             'plate_number' => $member->plate_number,
-            'type' => $$cardReader->type
+            'type' => $cardReader->type
         ]);
 
         TakeSnapshot::dispatch($accessLog);
