@@ -19,14 +19,14 @@ class CardReaderSeeder extends Seeder
                 'prefix' => 'W',
                 'access_gate_id' => 1,
                 'type' => 'IN',
-                'camera_ids' => [1, 2]
+                'camera_ids' => "[1, 2]"
             ],
             [
                 'name' => 'READER OUT',
                 'prefix' => 'X',
                 'access_gate_id' => 1,
                 'type' => 'OUT',
-                'camera_ids' => [3, 4]
+                'camera_ids' => "[3, 4]"
             ],
         ]);
     }
