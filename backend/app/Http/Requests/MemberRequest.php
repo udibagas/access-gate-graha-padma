@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class MemberRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class MemberRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check();
+        return Auth::check();
     }
 
     /**
@@ -42,7 +43,7 @@ class MemberRequest extends FormRequest
             'active' => 'Status',
             'address' => 'Alamat',
             'phone' => 'No. HP',
-            'sex' => 'Jenis Kelamin',
+            'gender' => 'Jenis Kelamin',
             'id_number' => 'Nomor Identitas'
         ];
     }

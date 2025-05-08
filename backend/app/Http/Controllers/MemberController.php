@@ -40,8 +40,8 @@ class MemberController extends Controller
             $q->where('group', (int) $request->group[0]);
         })->when($request->active, function ($q) use ($request) {
             $q->where('active', (int) $request->active[0]);
-        })->when($request->sex, function ($q) use ($request) {
-            $q->where('sex', (int) $request->sex[0]);
+        })->when($request->gender, function ($q) use ($request) {
+            $q->where('gender', (int) $request->gender[0]);
         })->orderBy($request->sortColumn ?: 'name', $request->sortOrder ?: 'asc');
 
         $data = $request->paginated == 'true' ? $resource->paginate($request->per_page) : $resource->get();
@@ -53,7 +53,7 @@ class MemberController extends Controller
                     return [
                         'No' => ++$index,
                         'Nama' => $item->name,
-                        'Jenis Kelamin' => $item->sex_label,
+                        'Jenis Kelamin' => $item->gender_label,
                         'No Identitas' => $item->id_number,
                         'Alamat' => $item->address,
                         'No HP' => $item->phone,
@@ -145,7 +145,7 @@ class MemberController extends Controller
             foreach ($request->rows as $row) {
                 $data = [
                     'name' => $row['name'],
-                    'sex' => $row['sex'],
+                    'gender' => $row['gender'],
                     'id_number' => $row['id_number'],
                     'address' => $row['address'],
                     'phone' => $row['phone'],
